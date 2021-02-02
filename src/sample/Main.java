@@ -16,71 +16,71 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         Screen.stage = primaryStage;
         BorderPane root = new BorderPane();
-        //UIManager UI = new UIManager();
+        UIManager UI = new UIManager();
 
         HomeScene homeScene = new HomeScene("Home");
         RecipeOverviewScene recipeOverviewScene = new RecipeOverviewScene("Recipe Overview");
         ChangeRecipeScene changeRecipeScene = new ChangeRecipeScene("Change Recipe");
 
-        //UI.addScene(homeScene);
-        //UI.addScene(recipeOverviewScene);
-        //UI.addScene(changeRecipeScene);
+        UI.addScene(homeScene);
+        UI.addScene(recipeOverviewScene);
+        UI.addScene(changeRecipeScene);
 
-        //System.out.println(UI);
-        //UI.showScene(2);
+        System.out.println(UI);
+        UI.showScene(2);
 
         ArrayList<Recipe> recipes = new ArrayList<Recipe>();
         recipes.add(new Recipe("Spaghetti"));
 
-        changeRecipeScene.show();
+        //changeRecipeScene.show();
         homeScene.homeBtn.setOnAction(event -> {
-            homeScene.show();
+            UI.showScene(0);
             System.out.println("Switching to home.");
 
         });
 
         homeScene.addRecipeBtn.setOnAction(event -> {
-            changeRecipeScene.show();
+            UI.showScene(2);
             System.out.println("Switching to recipe changer.");
         });
 
         homeScene.changeRecipeBtn.setOnAction(event -> {
-            recipeOverviewScene.show();
+            UI.showScene(2);
             System.out.println("Switching to recipe changer.");
         });
 
 
         recipeOverviewScene.homeBtn.setOnAction(event -> {
-            homeScene.show();
+            UI.showScene(0);
             System.out.println("Switching to home.");
 
         });
 
         recipeOverviewScene.addRecipeBtn.setOnAction(event -> {
-            changeRecipeScene.show();
+            UI.showScene(2);
             System.out.println("Switching to recipe changer.");
         });
 
         recipeOverviewScene.changeRecipeBtn.setOnAction(event -> {
-            recipeOverviewScene.show();
+            UI.showScene(2);
             System.out.println("Switching to recipe changer.");
         });
 
 
 
         changeRecipeScene.homeBtn.setOnAction(event -> {
-            homeScene.show();
+            UI.showScene(0);
             System.out.println("Switching to home.");
 
         });
 
         changeRecipeScene.addRecipeBtn.setOnAction(event -> {
-            changeRecipeScene.show();
+            UI.showScene(2);
             System.out.println("Switching to recipe changer.");
         });
 
         changeRecipeScene.changeRecipeBtn.setOnAction(event -> {
-            recipeOverviewScene.show();
+            UI.showScene(2);
             System.out.println("Switching to recipe changer.");
         });
 

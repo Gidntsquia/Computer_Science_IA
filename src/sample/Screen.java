@@ -16,8 +16,6 @@ public class Screen {
     public static Stage stage;
     public BorderPane screenPane;
     private String name;
-    private VBox leftButtonUI;
-    private HBox searchBarUI;
     public Button homeBtn;
     public Button addRecipeBtn;
     public Button changeRecipeBtn;
@@ -26,7 +24,7 @@ public class Screen {
     {
         // Creates the panes for this scene.
         screenPane = new BorderPane();
-        searchBarUI = new HBox();
+        HBox searchBarUI = new HBox();
 
         // Assigns screenName parameter to saved variable for later use.
         name = screenName;
@@ -60,7 +58,7 @@ public class Screen {
     public VBox createLeftButtonUI()
     {
         // Creates the pane for this side.
-        leftButtonUI = new VBox();
+        VBox leftButtonUI = new VBox();
 
         // Creates the buttons on the left side of the UI.
         homeBtn = new Button("Home");
