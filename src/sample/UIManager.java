@@ -1,16 +1,105 @@
 package sample;
 
+import javafx.geometry.Insets;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
 import java.util.ArrayList;
 
 public class UIManager {
+    public static Stage stage;
     private ArrayList<Screen> scenes = new ArrayList<Screen>();
+    private BorderPane root;
     private Screen currentScene;
     private int currentSceneIndex;
+
 
     public UIManager()
     {
         currentSceneIndex = 0;
+
+
+
+
     }
+
+
+
+    private HBox createTopUI()
+    {
+        HBox topUI = new HBox();
+        // Creates the search bar at the top of the UI.
+        Label recipesLabel = new Label("Recipes");
+        TextField searchBar = new TextField();
+        Button searchBtn = new Button("Search");
+        topUI.getChildren().addAll(recipesLabel, searchBar, searchBtn);
+        topUI.setPadding(new Insets(20, 5, 0,100));
+        topUI.setSpacing(5);
+
+        return topUI;
+    }
+
+
+    private VBox createLeftUI()
+    {
+        // Creates the pane for this side.
+        VBox leftUI = new VBox();
+
+        // Creates the buttons on the left side of the UI.
+        Button homeBtn = new Button("Home");
+        homeBtn.setOnAction(event -> {
+            showScene(0);
+        });
+
+        // Change this to add recipe button later.
+        Button viewRecipeBtn = new Button("View Recipe");
+        viewRecipeBtn.setOnAction(event -> {
+            showScene(1);
+        });
+
+        Button changeRecipeBtn = new Button("Change Recipe");
+        changeRecipeBtn.setOnAction(event -> {
+            showScene(2);
+        });
+
+        Button deleteBtn = new Button("Delete");
+        Button saveBtn = new Button("Save");
+        Button cancelBtn = new Button("Cancel");
+        Button quitBtn = new Button("Quit");
+
+        // Assigns functionality to the buttons.
+        leftUI.getChildren().addAll(homeBtn, viewRecipeBtn, changeRecipeBtn, deleteBtn, saveBtn, quitBtn);
+        leftUI.setSpacing(10);
+
+        return leftUI;
+    }
+
+
+    public void show()
+    {
+        root.setTop(createTopUI());
+        root.setLeft(createLeftUI());
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public void addScene(Screen newScene)
     {
