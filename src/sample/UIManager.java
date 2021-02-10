@@ -21,7 +21,7 @@ public class UIManager {
 
     public UIManager()
     {
-        currentSceneIndex = 0;
+        currentSceneIndex = -1;
         root = new BorderPane();
 
 
@@ -34,9 +34,14 @@ public class UIManager {
     {
         HBox topUI = new HBox();
         // Creates the search bar at the top of the UI.
+        String searchText = "";
         Label recipesLabel = new Label("Recipes");
         TextField searchBar = new TextField();
         Button searchBtn = new Button("Search");
+        searchBtn.setOnAction(event -> {
+            searchBar.clear();
+        });
+
         topUI.getChildren().addAll(recipesLabel, searchBar, searchBtn);
         topUI.setPadding(new Insets(20, 5, 0,100));
         topUI.setSpacing(5);
@@ -84,10 +89,11 @@ public class UIManager {
     {
         root.setTop(createTopUI());
         root.setLeft(createLeftUI());
-        stage.setTitle("IA " + " ??? " + " Screen");
+        showScene(0);
+
+        stage.setTitle("IA " + scenes.get(currentSceneIndex).getName() + " Screen");
         stage.setScene(new javafx.scene.Scene(root, 800, 800));
         stage.show();
-
     }
 
 
@@ -119,8 +125,9 @@ public class UIManager {
         {
             if(sceneIndex < scenes.size() && sceneIndex >= 0)
             {
-                scenes.get(sceneIndex).show();
+                root.setCenter(scenes.get(sceneIndex).getUI());
                 currentSceneIndex = sceneIndex;
+                stage.setTitle("IA " + scenes.get(currentSceneIndex).getName() + " Screen");
             }
             else
             {

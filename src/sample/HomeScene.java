@@ -7,18 +7,15 @@ import javafx.stage.Stage;
 public class HomeScene extends Screen{
     public HomeScene(String screenName) {
         super(screenName);
-    }
-
-    @Override
-    public void createCenter()
-    {
-        //System.out.println("Overridden");
-
+        BorderPane homeScene = new BorderPane();
         // Accesses screenpane from Screen class
         Recipe sampleRecipe = new Recipe("[Recipe Name]");
         Label sampleRecipeLabel = new Label(sampleRecipe.toString());
 
-        screenPane.setCenter(sampleRecipeLabel);
+        homeScene.setCenter(sampleRecipeLabel);
+
+        screenPane = homeScene;
+
     }
 
 

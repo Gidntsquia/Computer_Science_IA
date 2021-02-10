@@ -20,6 +20,15 @@ public class Main extends Application {
         // UI Manager with top and left button UI
         // Screens that only change the middle of this UI
         UIManager UI = new UIManager();
+
+        HomeScene homeScene = new HomeScene("Home");
+        RecipeOverviewScene recipeOverviewScene = new RecipeOverviewScene("Recipe Overview");
+        ChangeRecipeScene changeRecipeScene = new ChangeRecipeScene("Change Recipe");
+
+        UI.addScene(homeScene);
+        UI.addScene(recipeOverviewScene);
+        UI.addScene(changeRecipeScene);
+
         System.out.println("Yooooo");
         UI.show();
 
