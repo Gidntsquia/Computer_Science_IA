@@ -15,13 +15,17 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Screen.stage = primaryStage;
+        UIManager.stage = primaryStage;
         BorderPane root = new BorderPane();
         // UI Manager with top and left button UI
         // Screens that only change the middle of this UI
         UIManager UI = new UIManager();
-        System.out.println("What in the world?");
-        //UI.show();
+        System.out.println("Yooooo");
+        UI.show();
 
+        //primaryStage.setTitle("IA " + "Home" + " Screen");
+        //primaryStage.setScene(new javafx.scene.Scene(root, 800, 800));
+        //primaryStage.show();
 
 
 

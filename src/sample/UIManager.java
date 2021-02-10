@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class UIManager {
     public static Stage stage;
-    private ArrayList<Screen> scenes = new ArrayList<Screen>();
+    private ArrayList<Screen> scenes = new ArrayList<>();
     private BorderPane root;
     private Screen currentScene;
     private int currentSceneIndex;
@@ -22,7 +22,7 @@ public class UIManager {
     public UIManager()
     {
         currentSceneIndex = 0;
-
+        root = new BorderPane();
 
 
 
@@ -84,6 +84,9 @@ public class UIManager {
     {
         root.setTop(createTopUI());
         root.setLeft(createLeftUI());
+        stage.setTitle("IA " + " ??? " + " Screen");
+        stage.setScene(new javafx.scene.Scene(root, 800, 800));
+        stage.show();
 
     }
 
