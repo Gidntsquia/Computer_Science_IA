@@ -7,7 +7,11 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class HomeScene extends Screen{
 
@@ -55,19 +59,51 @@ public class HomeScene extends Screen{
     public void addRecipe(Recipe recipeToBeAdded)
     {
         recipes.add(recipeToBeAdded);
+        saveRecipes();
+        downloadRecipes();
         showRecipes();
     }
 
     private void downloadRecipes()
     {
-
+        try{
+            Scanner s = new Scanner(new File("output.txt"));
+            while(s.hasNextLine())
+            {
+                System.out.println(s.nextLine());
+            }
+        }catch(Exception myException){System.out.println(myException);}
     }
 
     private void saveRecipes()
     {
+        try{
+            Writer w = new FileWriter("output.txt", false);
+            for(Recipe recipe : recipes)
+            {
+                w.write(recipe.toString() + "\n");
+            }
+            w.close();
 
+        }catch(Exception myException) {System.out.println(myException);}
     }
 
+/*
+        try{
+            Writer w = new FileWriter("output.txt", false);
+            w.write("Yo\n");
+            w.close();
 
+        }catch(Exception myException) {System.out.println(myException);}
+
+        try{
+            Scanner s = new Scanner(new File("output.txt"));
+            while(s.hasNextLine())
+            {
+                System.out.println(s.nextLine());
+            }
+        }catch(Exception myException){System.out.println(myException);}
+
+ */
 
 }
