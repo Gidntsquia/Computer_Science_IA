@@ -14,7 +14,7 @@ public class ChangeRecipeScene extends Screen{
         Label centerLabel = new Label("Change the recipe here!!");
         center.getChildren().add(centerLabel);
         changeRecipeScene.setCenter(center);
-        screenPane = changeRecipeScene;
+        setUI(changeRecipeScene);
     }
 
 

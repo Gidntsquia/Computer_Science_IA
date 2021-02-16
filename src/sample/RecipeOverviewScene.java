@@ -21,25 +21,10 @@ public class RecipeOverviewScene extends Screen{
         center.getChildren().addAll(overviewLabel, sampleRecipeLabel);
         recipeOverviewScene.setCenter(center);
 
-        screenPane = recipeOverviewScene;
+        setUI(recipeOverviewScene);
+        //screenPane = recipeOverviewScene;
     }
 
 
-    public void createCenter()
-    {
-        //System.out.println("Overridden2");
 
-        VBox center = new VBox();
-
-        // Accesses screenpane from Screen class
-        Label overviewLabel = new Label("Overview:");
-
-        Recipe sampleRecipe = new Recipe("[Recipe Name]");
-        Label sampleRecipeLabel = new Label(sampleRecipe.toString());
-
-        center.getChildren().addAll(overviewLabel, sampleRecipeLabel);
-
-
-        screenPane.setCenter(center);
-    }
 }

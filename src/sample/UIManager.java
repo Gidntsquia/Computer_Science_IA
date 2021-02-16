@@ -74,6 +74,10 @@ public class UIManager {
 
         Button deleteBtn = new Button("Delete");
         Button saveBtn = new Button("Save");
+        saveBtn.setOnAction(event -> {
+            // Add a recipe to the home scene UI
+            scenes.get(0).addRecipe(new Recipe("New recipe!"));
+        });
         Button cancelBtn = new Button("Cancel");
         Button quitBtn = new Button("Quit");
 

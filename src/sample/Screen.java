@@ -3,6 +3,7 @@ package sample;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
@@ -15,21 +16,28 @@ import javafx.stage.Stage;
 // It also includes anything that all the scenes have in common.
 public class Screen {
     public static Stage stage;
-    public BorderPane screenPane;
+    public ScrollPane screenPane;
     private String name;
 
     public Screen(String screenName)
     {
         // Creates the panes for this scene.
-        this.screenPane = new BorderPane();
+        this.screenPane = new ScrollPane();
         name = screenName;
 
 
     }
 
-    public BorderPane getUI()
+    public void addRecipe(Recipe recipeToBeAdded){ /* Empty command, gets overriden in homeScene */}
+
+    public ScrollPane getUI()
     {
         return screenPane;
+    }
+
+    public void setUI(BorderPane inputPane)
+    {
+        screenPane.setContent(inputPane);
     }
 
     public static Stage getStage() {

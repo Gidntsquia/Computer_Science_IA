@@ -29,7 +29,9 @@ public class Main extends Application {
         UI.addScene(recipeOverviewScene);
         UI.addScene(changeRecipeScene);
 
-        System.out.println("Yooooo");
+        homeScene.addRecipe(new Recipe("Yo"));
+
+        System.out.println("Yoojvhgjooo");
         UI.show();
 
         //primaryStage.setTitle("IA " + "Home" + " Screen");
