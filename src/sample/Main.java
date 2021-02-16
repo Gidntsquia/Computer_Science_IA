@@ -31,7 +31,6 @@ public class Main extends Application {
 
         homeScene.addRecipe(new Recipe("Yo"));
 
-        System.out.println("Yoojvhgjooo");
         UI.show();
 
         //primaryStage.setTitle("IA " + "Home" + " Screen");

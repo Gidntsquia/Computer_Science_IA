@@ -22,7 +22,11 @@ public class RecipeOverviewScene extends Screen{
         recipeOverviewScene.setCenter(center);
 
         setUI(recipeOverviewScene);
-        //screenPane = recipeOverviewScene;
+    }
+
+    private void openRecipe(Recipe recipe)
+    {
+
     }
 
 

@@ -72,6 +72,11 @@ public class UIManager {
             showScene(2);
         });
 
+        Button newRecipeBtn = new Button("New Recipe");
+        newRecipeBtn.setOnAction(event -> {
+            showScene(2);
+        });
+
         Button deleteBtn = new Button("Delete");
         Button saveBtn = new Button("Save");
         saveBtn.setOnAction(event -> {
@@ -82,7 +87,7 @@ public class UIManager {
         Button quitBtn = new Button("Quit");
 
         // Assigns functionality to the buttons.
-        leftUI.getChildren().addAll(homeBtn, viewRecipeBtn, changeRecipeBtn, deleteBtn, saveBtn, quitBtn);
+        leftUI.getChildren().addAll(homeBtn, viewRecipeBtn, changeRecipeBtn, newRecipeBtn, deleteBtn, saveBtn, quitBtn);
         leftUI.setSpacing(10);
 
         return leftUI;

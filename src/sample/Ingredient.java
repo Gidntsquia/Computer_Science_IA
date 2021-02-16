@@ -47,6 +47,10 @@ public class Ingredient {
         return units;
     }
 
+    public String getFlavor() {
+        return flavor;
+    }
+
     public void setName(String ingredientName) {
         name = ingredientName;
     }
@@ -68,8 +72,20 @@ public class Ingredient {
 
     public double compare(Ingredient other)
     {
+        // TODO- add Pseudocode, expand this compare to include things one letter off
         // Compare different variables and return a value from 0 to 1.
-        return 0;
+        if(this.getName().equals(other.getName()))
+        {
+            return 1;
+        }
+        else if(this.getFlavor().equals(other.getFlavor()))
+        {
+            return 0.5;
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     public String toString()
