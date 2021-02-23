@@ -13,9 +13,10 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import static sample.UIManager.recipes;
+
 public class HomeScene extends Screen{
 
-    public static ArrayList<Recipe> recipes = new ArrayList<>();
     private BorderPane homeScene;
 
     public HomeScene(String screenName) {
@@ -33,6 +34,11 @@ public class HomeScene extends Screen{
 
     }
 
+    @Override
+    public void updateUI()
+    {
+        showRecipes();
+    }
     // Save recipe, download recipes
     // Get list of recipes +  recipe maker, make it where you can save recipes
 
@@ -44,6 +50,7 @@ public class HomeScene extends Screen{
         String recipeList = "";
         for(Recipe recipe : recipes)
         {
+            // Make this a UI box that gets added to a VBox
             recipeList += recipe.toString() + "\n\n";
         }
 
@@ -52,46 +59,8 @@ public class HomeScene extends Screen{
         //screenPane = homeScene;
     }
 
-    @Override
-    public void addRecipe(Recipe recipeToBeAdded)
-    {
-        recipes.add(recipeToBeAdded);
-        saveRecipes();
-        //downloadRecipes();
-        showRecipes();
-    }
 
-    @Override
-    public void deleteRecipe()
-    {
-        recipes.remove(recipes.size() - 1);
-        saveRecipes();
-        showRecipes();
-    }
 
-    private void downloadRecipes()
-    {
-        try{
-            Scanner s = new Scanner(new File("output.txt"));
-            while(s.hasNextLine())
-            {
-                System.out.println(s.nextLine());
-            }
-        }catch(Exception myException){System.out.println(myException);}
-    }
-
-    private void saveRecipes()
-    {
-        try{
-            Writer w = new FileWriter("output.txt", false);
-            for(Recipe recipe : recipes)
-            {
-                w.write(recipe.toString() + "\n");
-            }
-            w.close();
-
-        }catch(Exception myException) {System.out.println(myException);}
-    }
 
 
 

@@ -28,9 +28,11 @@ public class Screen {
 
     }
 
-    public void addRecipe(Recipe recipeToBeAdded){ /* Empty command, gets overriden in homeScene */}
+    public void updateUI()
+    {
+        // This command is empty because it is overriden by the child classes.
 
-    public void deleteRecipe(){ /* Empty command, gets overriden in homeScene */}
+    }
 
     public ScrollPane getUI()
     {

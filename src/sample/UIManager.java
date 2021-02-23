@@ -9,10 +9,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class UIManager {
     public static Stage stage;
+    public static ArrayList<Recipe> recipes = new ArrayList<>();
     private ArrayList<Screen> scenes = new ArrayList<>();
     private BorderPane root;
     private Screen currentScene;
@@ -79,13 +84,13 @@ public class UIManager {
 
         Button deleteBtn = new Button("Delete");
         deleteBtn.setOnAction(event -> {
-            scenes.get(0).deleteRecipe();
+            deleteRecipe();
         });
 
         Button saveBtn = new Button("Save");
         saveBtn.setOnAction(event -> {
             // Add a recipe to the home scene UI
-            scenes.get(0).addRecipe(new Recipe("New recipe!"));
+            addRecipe(new Recipe("New recipe!"));
         });
         Button cancelBtn = new Button("Cancel");
         Button quitBtn = new Button("Quit");
@@ -109,7 +114,45 @@ public class UIManager {
         stage.show();
     }
 
+    public void addRecipe(Recipe recipeToBeAdded)
+    {
+        recipes.add(recipeToBeAdded);
+        saveRecipes();
+        scenes.get(0).updateUI();
 
+    }
+
+    public void deleteRecipe()
+    {
+        recipes.remove(recipes.size() - 1);
+        saveRecipes();
+        scenes.get(0).updateUI();
+    }
+
+    private void downloadRecipes()
+    {
+        try{
+            Scanner s = new Scanner(new File("output.txt"));
+            while(s.hasNextLine())
+            {
+                System.out.println(s.nextLine());
+            }
+        }catch(Exception myException){System.out.println(myException);}
+    }
+
+    private void saveRecipes()
+    {
+        try{
+            Writer w = new FileWriter("output.txt", false);
+            for(Recipe recipe : recipes)
+            {
+                w.write(recipe.toString() + "\n");
+            }
+            w.close();
+
+        }catch(Exception myException) {System.out.println(myException);}
+
+    }
 
 
 

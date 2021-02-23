@@ -29,7 +29,7 @@ public class Main extends Application {
         UI.addScene(recipeOverviewScene);
         UI.addScene(changeRecipeScene);
 
-        homeScene.addRecipe(new Recipe("Yo"));
+        UI.addRecipe(new Recipe("Yo"));
 
         UI.show();
 
