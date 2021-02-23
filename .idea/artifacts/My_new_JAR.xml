@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="My new JAR">
+    <output-path>$PROJECT_DIR$/out/artifacts/My_new_JAR</output-path>
+    <root id="archive" name="Computer Science IA.jar">
+      <element id="module-output" name="Computer Science IA" />
+    </root>
+  </artifact>
+</component>

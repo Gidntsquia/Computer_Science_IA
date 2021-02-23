@@ -78,6 +78,10 @@ public class UIManager {
         });
 
         Button deleteBtn = new Button("Delete");
+        deleteBtn.setOnAction(event -> {
+            scenes.get(0).deleteRecipe();
+        });
+
         Button saveBtn = new Button("Save");
         saveBtn.setOnAction(event -> {
             // Add a recipe to the home scene UI

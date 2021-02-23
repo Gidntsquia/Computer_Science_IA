@@ -21,16 +21,13 @@ public class HomeScene extends Screen{
     public HomeScene(String screenName) {
         super(screenName);
         homeScene = new BorderPane();
+
+        // TODO add download recipes from file feature here
         recipes.clear();
         recipes.add(new Recipe("Recipe 1"));
         recipes.add(new Recipe("Recipe 2"));
         // Accesses screenpane from Screen class
         showRecipes();
-
-        ScrollPane scrollingCenter = new ScrollPane();
-
-        scrollingCenter.setContent(homeScene);
-
 
         setUI(homeScene);
 
@@ -60,7 +57,15 @@ public class HomeScene extends Screen{
     {
         recipes.add(recipeToBeAdded);
         saveRecipes();
-        downloadRecipes();
+        //downloadRecipes();
+        showRecipes();
+    }
+
+    @Override
+    public void deleteRecipe()
+    {
+        recipes.remove(recipes.size() - 1);
+        saveRecipes();
         showRecipes();
     }
 
@@ -88,22 +93,6 @@ public class HomeScene extends Screen{
         }catch(Exception myException) {System.out.println(myException);}
     }
 
-/*
-        try{
-            Writer w = new FileWriter("output.txt", false);
-            w.write("Yo\n");
-            w.close();
 
-        }catch(Exception myException) {System.out.println(myException);}
-
-        try{
-            Scanner s = new Scanner(new File("output.txt"));
-            while(s.hasNextLine())
-            {
-                System.out.println(s.nextLine());
-            }
-        }catch(Exception myException){System.out.println(myException);}
-
- */
 
 }

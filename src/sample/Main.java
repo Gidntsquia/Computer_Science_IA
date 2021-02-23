@@ -33,9 +33,9 @@ public class Main extends Application {
 
         UI.show();
 
-        //primaryStage.setTitle("IA " + "Home" + " Screen");
-        //primaryStage.setScene(new javafx.scene.Scene(root, 800, 800));
-        //primaryStage.show();
+
+
+
 
 
 
@@ -44,29 +44,6 @@ public class Main extends Application {
 
 
         /*
-        try{
-            Writer w = new FileWriter("output.txt", false);
-            w.write("Yo\n");
-            w.close();
-
-        }catch(Exception myException) {System.out.println(myException);}
-
-        try{
-            Scanner s = new Scanner(new File("output.txt"));
-            while(s.hasNextLine())
-            {
-                System.out.println(s.nextLine());
-            }
-        }catch(Exception myException){System.out.println(myException);}
-
-
-
-
-
-
-
-
-
         Ingredient potato = new Ingredient("Potato", 5, "cups", "starchy");
         Ingredient tomato = new Ingredient("Tomato", 2, "cups", "acidic");
 

@@ -30,6 +30,8 @@ public class Screen {
 
     public void addRecipe(Recipe recipeToBeAdded){ /* Empty command, gets overriden in homeScene */}
 
+    public void deleteRecipe(){ /* Empty command, gets overriden in homeScene */}
+
     public ScrollPane getUI()
     {
         return screenPane;
