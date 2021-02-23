@@ -1,6 +1,10 @@
 package sample;
 
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 
@@ -37,6 +41,10 @@ public class Recipe {
         image = recipeImage;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public ArrayList<Ingredient> getIngredients() {
         return ingredients;
     }
@@ -65,6 +73,31 @@ public class Recipe {
     }
     public int getDefaultServed() {
         return defaultServed;
+    }
+
+
+    public GridPane getRecipeBoxUI()
+    {
+        //TODO add black border to this
+        GridPane recipeBoxUI = new GridPane();
+        recipeBoxUI.setHgap(5);
+
+        Button viewRecipeBtn = new Button(this.toString());
+        viewRecipeBtn.setPrefSize(200, 100);
+        recipeBoxUI.add(viewRecipeBtn, 0, 0);
+
+        VBox rightBoxUI = new VBox();
+        // TODO make this red
+        Button deleteBtn = new Button("Delete");
+        deleteBtn.setStyle("-fx-background-color: pink;");
+
+        rightBoxUI.getChildren().add(deleteBtn);
+        rightBoxUI.getChildren().add(new Label("People served: " + this.getDefaultServed()));
+
+        recipeBoxUI.add(rightBoxUI, 1, 0);
+
+        return recipeBoxUI;
+
     }
 
     public String toString()

@@ -2,27 +2,11 @@ Recipe 1
 Ingredients: 
 Procedure: 
 
-New recipe!
+Recipe 2
 Ingredients: 
 Procedure: 
 
-New recipe!
-Ingredients: 
-Procedure: 
-
-New recipe!
-Ingredients: 
-Procedure: 
-
-New recipe!
-Ingredients: 
-Procedure: 
-
-New recipe!
-Ingredients: 
-Procedure: 
-
-New recipe!
+Yo
 Ingredients: 
 Procedure: 
 

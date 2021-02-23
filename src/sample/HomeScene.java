@@ -5,6 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -47,14 +48,18 @@ public class HomeScene extends Screen{
     // and added to the center of the homescene. Then, we update the screenpane to be exactly like the homescene.
     public void showRecipes()
     {
-        String recipeList = "";
+        VBox recipeList = new VBox();
+        recipeList.setSpacing(20);
+        //String recipeList = "";
         for(Recipe recipe : recipes)
         {
+            recipeList.getChildren().add(recipe.getRecipeBoxUI());
             // Make this a UI box that gets added to a VBox
-            recipeList += recipe.toString() + "\n\n";
+
+            //    recipeList += recipe.toString() + "\n\n";
         }
 
-        homeScene.setCenter(new Label(recipeList));
+        homeScene.setCenter(recipeList);
 
         //screenPane = homeScene;
     }
