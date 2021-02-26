@@ -3,7 +3,6 @@ package sample;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
@@ -33,7 +32,7 @@ public class RecipeOverviewScene extends Screen{
         Label overviewLabel = new Label("Overview");
         String summaryText = "Using ";
         ArrayList<Ingredient> ingredients = recipe.getIngredients();
-        ArrayList<String> procedures = recipe.getMethods();
+        ArrayList<String> procedures = recipe.getProcedures();
 
         // Iterates through all ingredients, adding each ingredient's name to the string representation of ingredients.
         // Hard coded functionality for if there are only 1 or 2 ingredients.
@@ -91,8 +90,8 @@ public class RecipeOverviewScene extends Screen{
 
 
         Label recipeSummary = new Label(summaryText + "\n");
-        Label ingredientList = new Label(recipe.getIngredientList() + "\n");
-        Label procedureList = new Label(recipe.getMethodList() + "\n");
+        Label ingredientList = new Label("Ingredients\n" + recipe.getIngredientList() + "\n");
+        Label procedureList = new Label("Procedures\n" + recipe.getProcedureList() + "\n");
 
         mainUI.getChildren().addAll(recipeSummary, ingredientList, procedureList);
 

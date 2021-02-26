@@ -1,6 +1,5 @@
 package sample;
 
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 public class Recipe {
     private String name;
     private ArrayList<Ingredient> ingredients;
-    private ArrayList<String> methods;
+    private ArrayList<String> procedures;
     private int defaultServed;
     private Image image;
     private int daysSinceLastAccess;
@@ -23,20 +22,20 @@ public class Recipe {
         name = recipeName;
     }
 
-    public Recipe(String recipeName, ArrayList<Ingredient> recipeIngredients, ArrayList<String> recipeMethods, int recipeDefaultServed, int recipeDaysSinceLastAccess)
+    public Recipe(String recipeName, ArrayList<Ingredient> recipeIngredients, ArrayList<String> recipeProcedures, int recipeDefaultServed, int recipeDaysSinceLastAccess)
     {
        name = recipeName;
        ingredients = recipeIngredients;
-       methods = recipeMethods;
+       procedures = recipeProcedures;
        defaultServed = recipeDefaultServed;
        daysSinceLastAccess = recipeDaysSinceLastAccess;
     }
 
-    public Recipe(String recipeName, ArrayList<Ingredient> recipeIngredients, ArrayList<String> recipeMethods, int recipeDefaultServed, int recipeDaysSinceLastAccess, Image recipeImage)
+    public Recipe(String recipeName, ArrayList<Ingredient> recipeIngredients, ArrayList<String> recipeProcedures, int recipeDefaultServed, int recipeDaysSinceLastAccess, Image recipeImage)
     {
         name = recipeName;
         ingredients = recipeIngredients;
-        methods = recipeMethods;
+        procedures = recipeProcedures;
         defaultServed = recipeDefaultServed;
         daysSinceLastAccess = recipeDaysSinceLastAccess;
         image = recipeImage;
@@ -61,15 +60,15 @@ public class Recipe {
         return list;
     }
 
-    public ArrayList<String> getMethods() {
-        return methods;
+    public ArrayList<String> getProcedures() {
+        return procedures;
     }
 
-    public String getMethodList(){
+    public String getProcedureList(){
         String list = "";
-        for(int i = 0; i < methods.size(); i++)
+        for(int i = 0; i < procedures.size(); i++)
         {
-            list += (i + 1) + ". " + methods.get(i) + "\n";
+            list += (i + 1) + ". " + procedures.get(i) + "\n";
         }
         return list;
     }
@@ -119,11 +118,6 @@ public class Recipe {
         if(this.ingredients != null)
         {
             recipeOverview += getIngredientList();
-        }
-        //recipeOverview += "Procedure: \n";
-        if(this.methods != null)
-        {
-            //recipeOverview += getMethodList();
         }
 
         return recipeOverview;
