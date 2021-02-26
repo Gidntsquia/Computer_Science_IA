@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -84,6 +85,12 @@ public class Recipe {
 
         Button viewRecipeBtn = new Button(this.toString());
         viewRecipeBtn.setPrefSize(200, 100);
+        viewRecipeBtn.setOnAction(event -> {
+            UIManager.showScene(1);
+            UIManager.openRecipeOverview(this);
+        });
+
+
         recipeBoxUI.add(viewRecipeBtn, 0, 0);
 
         VBox rightBoxUI = new VBox();

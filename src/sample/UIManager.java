@@ -18,16 +18,20 @@ import java.util.Scanner;
 public class UIManager {
     public static Stage stage;
     public static ArrayList<Recipe> recipes = new ArrayList<>();
-    private ArrayList<Screen> scenes = new ArrayList<>();
-    private BorderPane root;
+    private  static ArrayList<Screen> scenes = new ArrayList<>();
+
+    // TODO these shouldn't be static
+    private static int currentSceneIndex;
+    private static BorderPane root;
+
     private Screen currentScene;
-    private int currentSceneIndex;
 
 
     public UIManager()
     {
         currentSceneIndex = -1;
         root = new BorderPane();
+
 
 
 
@@ -155,7 +159,10 @@ public class UIManager {
     }
 
 
-
+    public static void openRecipeOverview(Recipe recipe)
+    {
+        scenes.get(1).openRecipe(recipe);
+    }
 
 
 
@@ -175,12 +182,13 @@ public class UIManager {
     // 0    - Home
     // 1    - Recipe Overview
     // 2    - Change Recipe
-    public void showScene(int sceneIndex)
+    public static void showScene(int sceneIndex)
     {
         if(sceneIndex != currentSceneIndex)
         {
             if(sceneIndex < scenes.size() && sceneIndex >= 0)
             {
+                scenes.get(sceneIndex).updateUI();
                 root.setCenter(scenes.get(sceneIndex).getUI());
                 currentSceneIndex = sceneIndex;
                 stage.setTitle("IA " + scenes.get(currentSceneIndex).getName() + " Screen");

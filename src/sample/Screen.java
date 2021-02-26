@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -33,6 +34,12 @@ public class Screen {
         // This command is empty because it is overriden by the child classes.
 
     }
+
+    public void openRecipe(Recipe recipe)
+    {
+        // This command is empty because it is overriden by the child classes.
+    }
+
 
     public ScrollPane getUI()
     {

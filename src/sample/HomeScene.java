@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollBar;
@@ -26,8 +27,7 @@ public class HomeScene extends Screen{
 
         // TODO add download recipes from file feature here
         recipes.clear();
-        recipes.add(new Recipe("Recipe 1"));
-        recipes.add(new Recipe("Recipe 2"));
+
         // Accesses screenpane from Screen class
         showRecipes();
 
