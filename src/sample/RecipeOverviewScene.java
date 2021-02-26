@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 
 public class RecipeOverviewScene extends Screen{
+    private Recipe currentRecipe;
 
     public RecipeOverviewScene(String screenName) {
         super(screenName);
@@ -17,11 +18,8 @@ public class RecipeOverviewScene extends Screen{
         // Accesses screenpane from Screen class
         Label overviewLabel = new Label("Overview:");
 
-        Recipe sampleRecipe = new Recipe("[Recipe Name]");
-        Label sampleRecipeLabel = new Label(sampleRecipe.toString());
-
-        center.getChildren().addAll(overviewLabel, sampleRecipeLabel);
-        recipeOverviewScene.setCenter(center);
+        // Sets current recipe to a default value.
+        currentRecipe = new Recipe("[Recipe Name]");
 
         setUI(recipeOverviewScene);
     }
@@ -29,7 +27,7 @@ public class RecipeOverviewScene extends Screen{
     @Override
     public void openRecipe(Recipe recipe)
     {
-        System.out.println("Something's not working...");
+        currentRecipe = recipe;
         BorderPane overviewUI = new BorderPane();
         VBox mainUI = new VBox();
         Label overviewLabel = new Label("Overview");
@@ -104,6 +102,11 @@ public class RecipeOverviewScene extends Screen{
 
     }
 
+    @Override
+    public String getTitle()
+    {
+        return "IA " + this.getName() + " Screen. Currently viewing: " + currentRecipe.getName();
+    }
 
 
 }

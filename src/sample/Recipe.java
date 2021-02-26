@@ -55,7 +55,8 @@ public class Recipe {
         String list = "";
         for(int i = 0; i < ingredients.size(); i++)
         {
-            list += (i + 1) + ". " + ingredients.get(i) + "\n";
+            // Numbered list [1. , 2., 3. ...] with a plural version of the ingredient name.
+            list += (i + 1) + ". " + ingredients.get(i) + "s\n";
         }
         return list;
     }
@@ -79,22 +80,25 @@ public class Recipe {
 
     public GridPane getRecipeBoxUI()
     {
-        //TODO add black border to this
+        //TODO add black border to this.
         GridPane recipeBoxUI = new GridPane();
         recipeBoxUI.setHgap(5);
 
         Button viewRecipeBtn = new Button(this.toString());
+        // TODO this should increase in size as the window increases in size.
         viewRecipeBtn.setPrefSize(200, 100);
+
+        // TODO probably a better way to do this.
         viewRecipeBtn.setOnAction(event -> {
-            UIManager.showScene(1);
             UIManager.openRecipeOverview(this);
+            UIManager.showScene(1);
         });
 
 
         recipeBoxUI.add(viewRecipeBtn, 0, 0);
 
         VBox rightBoxUI = new VBox();
-        // TODO make this red
+        // TODO make this red correctly.
         Button deleteBtn = new Button("Delete");
         deleteBtn.setStyle("-fx-background-color: pink;");
 
@@ -112,9 +116,15 @@ public class Recipe {
         String recipeOverview = "";
         recipeOverview += name + "\n";
         recipeOverview += "Ingredients: \n";
-        //recipeOverview += getIngredientList();
-        recipeOverview += "Procedure: \n";
-        //recipeOverview += getMethodList();
+        if(this.ingredients != null)
+        {
+            recipeOverview += getIngredientList();
+        }
+        //recipeOverview += "Procedure: \n";
+        if(this.methods != null)
+        {
+            //recipeOverview += getMethodList();
+        }
 
         return recipeOverview;
 

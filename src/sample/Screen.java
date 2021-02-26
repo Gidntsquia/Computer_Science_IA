@@ -51,12 +51,14 @@ public class Screen {
         screenPane.setContent(inputPane);
     }
 
-    public static Stage getStage() {
-        return stage;
+    public String getName()
+    {
+        return name;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle()
+    {
+        return "IA " + this.getName() + " Screen";
     }
 
     public String toString()

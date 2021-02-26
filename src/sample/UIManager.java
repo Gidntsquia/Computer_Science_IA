@@ -191,7 +191,8 @@ public class UIManager {
                 scenes.get(sceneIndex).updateUI();
                 root.setCenter(scenes.get(sceneIndex).getUI());
                 currentSceneIndex = sceneIndex;
-                stage.setTitle("IA " + scenes.get(currentSceneIndex).getName() + " Screen");
+                stage.setTitle(scenes.get(currentSceneIndex).getTitle());
+
             }
             else
             {
