@@ -50,6 +50,11 @@ public class Screen {
         // This command is empty because it is overriden by the child classes.
     }
 
+    public void setRecipe(Recipe recipe)
+    {
+        // This command is empty because it is overriden by the child classes.
+    }
+
     public Recipe getRecipe()
     {
         // This command is empty because it is overriden by the child classes.

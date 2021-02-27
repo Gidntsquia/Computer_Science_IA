@@ -52,5 +52,11 @@ public class RecipeOverviewScene extends Screen{
         return "IA " + this.getName() + " Screen. Currently viewing: " + currentRecipe.getName();
     }
 
+    @Override
+    public Recipe getRecipe()
+    {
+        return this.currentRecipe;
+    }
+
 
 }

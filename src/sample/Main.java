@@ -7,8 +7,10 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Scanner;
 
 import static sample.UIManager.recipes;
@@ -34,23 +36,26 @@ public class Main extends Application {
 
         Ingredient potato = new Ingredient("Potato", 5, "cups", "starchy");
         Ingredient tomato = new Ingredient("Tomato", 2, "cups", "acidic");
+        Ingredient.addIngredientToList(potato);
+        Ingredient.addIngredientToList(tomato);
+
         ArrayList<Ingredient> basicIngredients = new ArrayList<>();
         basicIngredients.add(potato);
-        //basicIngredients.add(tomato);
+        basicIngredients.add(tomato);
 
 
         String method1 = "Skin the potato";
         String method2 = "Wash the tomato";
         String method3 = "Put it all together";
         ArrayList<String> basicMethods = new ArrayList<>();
-        //basicMethods.add(method1);
+        basicMethods.add(method1);
         basicMethods.add(method2);
         basicMethods.add(method3);
 
 
-        UI.addRecipe(new Recipe("Recipe 1", basicIngredients, basicMethods, 10, 0));
-        UI.addRecipe(new Recipe("Recipe 2", basicIngredients, basicMethods, 1, 5));
-        UI.addRecipe(new Recipe("Yo", basicIngredients, basicMethods, 100, 27));
+        UI.addRecipe(new Recipe("Recipe 1", new ArrayList<>(basicIngredients), new ArrayList<>(basicMethods), 10, 0));
+        UI.addRecipe(new Recipe("Recipe 2", new ArrayList<>(basicIngredients), new ArrayList<>(basicMethods), 1, 5));
+        UI.addRecipe(new Recipe("Yo", new ArrayList<>(basicIngredients), new ArrayList<>(basicMethods), 100, 27));
 
         UI.show();
 

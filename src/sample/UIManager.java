@@ -78,17 +78,29 @@ public class UIManager {
 
         Button changeRecipeBtn = new Button("Change Recipe");
         changeRecipeBtn.setOnAction(event -> {
-            showScene(2);
+            // Only works if on Recipe Overview screen.
+            if(currentSceneIndex == 1)
+            {
+                scenes.get(2).setRecipe(scenes.get(1).getRecipe());
+                showScene(2);
+            }
+
         });
 
         Button newRecipeBtn = new Button("New Recipe");
         newRecipeBtn.setOnAction(event -> {
+            Recipe newRecipe = new Recipe("");
+            newRecipe.setProcedures(new ArrayList<String>(1));
+            newRecipe.setIngredients(new ArrayList<Ingredient>(1));
+            addRecipe(newRecipe);
+            scenes.get(2).setRecipe(newRecipe);
             showScene(2);
+
         });
 
         Button deleteBtn = new Button("Delete");
         deleteBtn.setOnAction(event -> {
-            deleteRecipe();
+            deleteRecipe(recipes.size() - 1);
         });
 
         Button saveBtn = new Button("Save");
@@ -103,12 +115,14 @@ public class UIManager {
             {
                 // Save recipe that is currently being changed if on change recipe screen.
                 scenes.get(2).saveRecipe();
-                addRecipe(scenes.get(2).getRecipe());
                 showScene(0);
             }
 
         });
         Button cancelBtn = new Button("Cancel");
+        cancelBtn.setOnAction(event -> {
+            showScene(0);
+        });
         Button quitBtn = new Button("Quit");
 
         // Assigns functionality to the buttons.
@@ -138,9 +152,9 @@ public class UIManager {
 
     }
 
-    public void deleteRecipe()
+    public void deleteRecipe(int deleteIndex)
     {
-        recipes.remove(recipes.size() - 1);
+        recipes.remove(deleteIndex);
         saveRecipes();
         scenes.get(0).updateUI();
     }

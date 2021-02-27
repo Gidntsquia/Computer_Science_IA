@@ -33,7 +33,7 @@ public class ChangeRecipeScene extends Screen{
     // The user can change whatever they'd like about the recipe, and then when they hit "Save",
     // the recipe will update its values to reflect the user's changes.
     // There will be a dropdown menu to add/remove ingredients
-    public void openChangeRecipeUI(Recipe recipe)
+    public void openChangeRecipeUI()
     {
         // ChangeRecipeUI = overall UI
         // leftUI = all left UI
@@ -46,21 +46,20 @@ public class ChangeRecipeScene extends Screen{
 
         HBox rightUI = new HBox();
 
-        currentRecipe = recipe;
-        recipeNameField = new TextField(recipe.getName());
-        ingredients = recipe.getIngredients();
+        recipeNameField = new TextField(currentRecipe.getName());
+        ingredients = currentRecipe.getIngredients();
         for(int i = 0; i < ingredients.size(); i++)
         {
             ingredientMenusUI.getChildren().add(getIngredientLine(ingredients.get(i), i));
         }
 
         procedureFields = new ArrayList<>();
-        for(int i = 0; i < recipe.getProcedures().size(); i++)
+        for(int i = 0; i < currentRecipe.getProcedures().size(); i++)
         {
-            procedureFields.add(new TextField(recipe.getProcedures().get(i)));
+            procedureFields.add(new TextField(currentRecipe.getProcedures().get(i)));
             procedureFieldsUI.getChildren().add(procedureFields.get(i));
         }
-        defaultServedField = new TextField(String.valueOf(recipe.getDefaultServed()));
+        defaultServedField = new TextField(String.valueOf(currentRecipe.getDefaultServed()));
 
         Button addIngredientBtn = new Button("+ Add Ingredient");
         addIngredientBtn.setOnAction(event -> {
@@ -79,7 +78,7 @@ public class ChangeRecipeScene extends Screen{
 
         changeRecipeUI.setLeft(leftUI);
         changeRecipeUI.setRight(rightUI);
-        changeRecipeUI.setTop(new Label("Overview\n" + recipe.getOverview()));
+        changeRecipeUI.setTop(new Label("Overview\n" + currentRecipe.getOverview()));
 
 
         setUI(changeRecipeUI);
@@ -172,7 +171,7 @@ public class ChangeRecipeScene extends Screen{
 
         Recipe recipe = new Recipe("Sample Recipe", basicIngredients, basicMethods, 651, 3);
 
-        openChangeRecipeUI(recipe);
+        openChangeRecipeUI();
     }
 
     @Override
@@ -193,6 +192,13 @@ public class ChangeRecipeScene extends Screen{
     {
         return this.currentRecipe;
     }
+
+    @Override
+    public void setRecipe(Recipe recipe)
+    {
+        this.currentRecipe = recipe;
+    }
+
 
 
 

@@ -25,8 +25,6 @@ public class Ingredient {
         quantity = defaultQuantity;
         units = "cups";
 
-        allIngredients.add(this);
-
 
 
     }
@@ -38,8 +36,6 @@ public class Ingredient {
         quantity = defaultQuantity;
         units = ingredientUnits;
         flavor = ingredientFlavor;
-
-        allIngredients.add(this);
 
 
 
@@ -102,12 +98,17 @@ public class Ingredient {
         }
     }
 
+    public static void addIngredientToList(Ingredient ingredientToBeAdded)
+    {
+        allIngredients.add(ingredientToBeAdded);
+    }
+
     public static Ingredient copyIngredient(Ingredient other)
     {
         Ingredient copy = new Ingredient(other.getName(), other.getDefaultQuantity(), other.getUnits(), other.getFlavor());
-        allIngredients.remove(allIngredients.size() - 1);
         return copy;
     }
+
 
     public String toString()
     {
