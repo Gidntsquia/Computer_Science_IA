@@ -177,11 +177,12 @@ public class ChangeRecipeScene extends Screen{
     @Override
     public void saveRecipe()
     {
+        // TODO need to make it where you can change name of Recipe
         currentRecipe.setName(recipeNameField.getText());
         // Ingredients
 
         currentRecipe.setProcedures(getStringsFromTextFields(procedureFields));
-        //currentRecipe.setDefaultServed(Integer.getInteger(defaultServedField.getText()));
+        currentRecipe.setDefaultServed(Integer.parseInt(defaultServedField.getText()));
 
         // Sets most recent access day to today.
         currentRecipe.setDaysSinceLastAccess(0);
