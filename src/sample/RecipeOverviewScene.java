@@ -27,73 +27,18 @@ public class RecipeOverviewScene extends Screen{
     public void openRecipe(Recipe recipe)
     {
         currentRecipe = recipe;
+        // Sets most recent access day to today.
+        recipe.setDaysSinceLastAccess(0);
+
         BorderPane overviewUI = new BorderPane();
         VBox mainUI = new VBox();
-        Label overviewLabel = new Label("Overview");
-        String summaryText = "Using ";
-        ArrayList<Ingredient> ingredients = recipe.getIngredients();
-        ArrayList<String> procedures = recipe.getProcedures();
-
-        // Iterates through all ingredients, adding each ingredient's name to the string representation of ingredients.
-        // Hard coded functionality for if there are only 1 or 2 ingredients.
-        if(ingredients.size() == 1)
-        {
-            summaryText += ingredients.get(0).getName().toLowerCase() + "s, ";
-        }
-        else if(ingredients.size() == 2)
-        {
-            summaryText += ingredients.get(0).getName().toLowerCase() + "s ";
-            summaryText += "and " + ingredients.get(1).getName().toLowerCase() + "s, ";
-        }
-        else
-        {
-            for(int i = 0; i < ingredients.size(); i++)
-            {
-                if(i == ingredients.size() - 1)
-                {
-                    summaryText += "and " + ingredients.get(i).getName().toLowerCase() + "s, ";
-                }
-                else
-                {
-                    summaryText += ingredients.get(i).getName().toLowerCase() + "s, ";
-                }
 
 
-            }
-        }
-        // Iterates through all procedures, adding each procedure's name to the string representation of procedures.
-        // Hard coded functionality for if there are only 1 or 2 procedures.
-        if(procedures.size() == 1)
-        {
-            summaryText += procedures.get(0).toLowerCase() + ". ";
-        }
-        else if(procedures.size() == 2)
-        {
-            summaryText += procedures.get(0).toLowerCase() + " ";
-            summaryText += "and then " + procedures.get(1).toLowerCase() + ".";
-        }
-        else
-        {
-            for(int i = 0; i < procedures.size(); i++)
-            {
-                if(i == procedures.size() - 1)
-                {
-                    summaryText += "and then " + procedures.get(i).toLowerCase() + ".";
-                }
-                else
-                {
-                    summaryText += procedures.get(i).toLowerCase() + ", ";
-                }
-            }
-        }
-
-
-
-        Label recipeSummary = new Label(summaryText + "\n");
+        Label recipeSummary = new Label(recipe.getOverview() + "\n");
         Label ingredientList = new Label("Ingredients\n" + recipe.getIngredientList() + "\n");
         Label procedureList = new Label("Procedures\n" + recipe.getProcedureList() + "\n");
 
-        mainUI.getChildren().addAll(recipeSummary, ingredientList, procedureList);
+        mainUI.getChildren().addAll(new Label("Overview"), recipeSummary, ingredientList, procedureList);
 
         overviewUI.setLeft(mainUI);
 

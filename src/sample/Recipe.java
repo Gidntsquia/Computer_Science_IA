@@ -76,6 +76,67 @@ public class Recipe {
         return defaultServed;
     }
 
+    public String getOverview()
+    {
+        String summaryText = "Using ";
+
+        // Iterates through all ingredients, adding each ingredient's name to the string representation of ingredients.
+        // Hard coded functionality for if there are only 1 or 2 ingredients.
+        if(ingredients.size() == 1)
+        {
+            summaryText += ingredients.get(0).getName().toLowerCase() + "s, ";
+        }
+        else if(ingredients.size() == 2)
+        {
+            summaryText += ingredients.get(0).getName().toLowerCase() + "s ";
+            summaryText += "and " + ingredients.get(1).getName().toLowerCase() + "s, ";
+        }
+        else
+        {
+            for(int i = 0; i < ingredients.size(); i++)
+            {
+                if(i == ingredients.size() - 1)
+                {
+                    summaryText += "and " + ingredients.get(i).getName().toLowerCase() + "s, ";
+                }
+                else
+                {
+                    summaryText += ingredients.get(i).getName().toLowerCase() + "s, ";
+                }
+
+
+            }
+        }
+
+        // Iterates through all procedures, adding each procedure's name to the string representation of procedures.
+        // Hard coded functionality for if there are only 1 or 2 procedures.
+        if(procedures.size() == 1)
+        {
+            summaryText += procedures.get(0).toLowerCase() + ". ";
+        }
+        else if(procedures.size() == 2)
+        {
+            summaryText += procedures.get(0).toLowerCase() + " ";
+            summaryText += "and then " + procedures.get(1).toLowerCase() + ".";
+        }
+        else
+        {
+            for(int i = 0; i < procedures.size(); i++)
+            {
+                if(i == procedures.size() - 1)
+                {
+                    summaryText += "and then " + procedures.get(i).toLowerCase() + ".";
+                }
+                else
+                {
+                    summaryText += procedures.get(i).toLowerCase() + ", ";
+                }
+            }
+        }
+
+        return summaryText;
+    }
+
 
     public GridPane getRecipeBoxUI()
     {
@@ -108,6 +169,31 @@ public class Recipe {
 
         return recipeBoxUI;
 
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setIngredients(ArrayList<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public void setProcedures(ArrayList<String> procedures) {
+        this.procedures = procedures;
+    }
+
+    public void setDaysSinceLastAccess(int daysSinceLastAccess) {
+        this.daysSinceLastAccess = daysSinceLastAccess;
+    }
+
+    public void setDefaultServed(int defaultServed) {
+        this.defaultServed = defaultServed;
+    }
+
+    // TODO implement this
+    public void setImage(Image image) {
+        this.image = image;
     }
 
     public String toString()

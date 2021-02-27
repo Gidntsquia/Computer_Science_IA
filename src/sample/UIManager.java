@@ -93,8 +93,20 @@ public class UIManager {
 
         Button saveBtn = new Button("Save");
         saveBtn.setOnAction(event -> {
-            // Add a recipe to the home scene UI
-            addRecipe(new Recipe("New recipe!"));
+            if(getCurrentSceneIndex() == 0)
+            {
+                // Save all recipes if on home screen
+                // Add a recipe to the home scene UI
+                addRecipe(new Recipe("New recipe!"));
+            }
+            else if(getCurrentSceneIndex() == 2)
+            {
+                // Save recipe that is currently being changed if on change recipe screen.
+                scenes.get(2).saveRecipe();
+                addRecipe(scenes.get(2).getRecipe());
+                showScene(0);
+            }
+
         });
         Button cancelBtn = new Button("Cancel");
         Button quitBtn = new Button("Quit");
@@ -188,6 +200,7 @@ public class UIManager {
         {
             if(sceneIndex < scenes.size() && sceneIndex >= 0)
             {
+                scenes.get(sceneIndex).runBirthMethods();
                 scenes.get(sceneIndex).updateUI();
                 root.setCenter(scenes.get(sceneIndex).getUI());
                 currentSceneIndex = sceneIndex;

@@ -1,6 +1,9 @@
 package sample;
 
+import java.util.ArrayList;
+
 public class Ingredient {
+    public static ArrayList<Ingredient> allIngredients = new ArrayList<>();
     private String name;
     private double quantity;
     private double defaultQuantity;
@@ -22,6 +25,10 @@ public class Ingredient {
         quantity = defaultQuantity;
         units = "cups";
 
+        allIngredients.add(this);
+
+
+
     }
 
     public Ingredient(String ingredientName, double ingredientDefaultQuanitity, String ingredientUnits, String ingredientFlavor)
@@ -32,6 +39,9 @@ public class Ingredient {
         units = ingredientUnits;
         flavor = ingredientFlavor;
 
+        allIngredients.add(this);
+
+
 
     }
 
@@ -41,6 +51,10 @@ public class Ingredient {
 
     public double getQuantity() {
         return quantity;
+    }
+
+    public double getDefaultQuantity() {
+        return defaultQuantity;
     }
 
     public String getUnits() {
@@ -86,6 +100,13 @@ public class Ingredient {
         {
             return 0;
         }
+    }
+
+    public static Ingredient copyIngredient(Ingredient other)
+    {
+        Ingredient copy = new Ingredient(other.getName(), other.getDefaultQuantity(), other.getUnits(), other.getFlavor());
+        allIngredients.remove(allIngredients.size() - 1);
+        return copy;
     }
 
     public String toString()
