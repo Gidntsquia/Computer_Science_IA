@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,13 +19,9 @@ import java.util.Scanner;
 public class UIManager {
     public static Stage stage;
     public static ArrayList<Recipe> recipes = new ArrayList<>();
-    private  static ArrayList<Screen> scenes = new ArrayList<>();
-
-    // TODO these shouldn't be static
-    private static int currentSceneIndex;
-    private static BorderPane root;
-
-    private Screen currentScene;
+    protected static ArrayList<Screen> scenes = new ArrayList<>();
+    protected static int currentSceneIndex;
+    protected static BorderPane root;
 
 
     public UIManager()
@@ -32,14 +29,11 @@ public class UIManager {
         currentSceneIndex = -1;
         root = new BorderPane();
 
-
-
-
     }
 
 
 
-    private HBox createTopUI()
+    protected HBox createTopUI()
     {
         HBox topUI = new HBox();
         // Creates the search bar at the top of the UI.
@@ -70,11 +64,15 @@ public class UIManager {
             showScene(0);
         });
 
+        /*
         // Change this to add recipe button later.
         Button viewRecipeBtn = new Button("View Recipe");
         viewRecipeBtn.setOnAction(event -> {
             showScene(1);
         });
+
+
+         */
 
         Button changeRecipeBtn = new Button("Change Recipe");
         changeRecipeBtn.setOnAction(event -> {
@@ -124,25 +122,42 @@ public class UIManager {
             showScene(0);
         });
         Button quitBtn = new Button("Quit");
+        quitBtn.setOnAction(event -> {
+            if(currentSceneIndex == 0)
+            {
+                Platform.exit();
+            }
+            else
+            {
+                showScene(0);
+            }
+        });
 
         // Assigns functionality to the buttons.
-        leftUI.getChildren().addAll(homeBtn, viewRecipeBtn, changeRecipeBtn, newRecipeBtn, deleteBtn, saveBtn, quitBtn);
+        leftUI.getChildren().addAll(homeBtn, changeRecipeBtn, newRecipeBtn, deleteBtn, saveBtn, quitBtn);
         leftUI.setSpacing(10);
 
         return leftUI;
     }
 
 
-    public void show()
+    protected void refreshGeneralUI()
     {
         root.setTop(createTopUI());
         root.setLeft(createLeftUI());
+    }
+
+
+    public void show()
+    {
+        refreshGeneralUI();
         showScene(0);
 
         stage.setTitle("IA " + scenes.get(currentSceneIndex).getName() + " Screen");
         stage.setScene(new javafx.scene.Scene(root, 800, 800));
         stage.show();
     }
+
 
     public void addRecipe(Recipe recipeToBeAdded)
     {
@@ -155,6 +170,13 @@ public class UIManager {
     public void deleteRecipe(int deleteIndex)
     {
         recipes.remove(deleteIndex);
+        saveRecipes();
+        scenes.get(0).updateUI();
+    }
+
+    public void deleteRecipe(Object objectForRemoval)
+    {
+        recipes.remove(objectForRemoval);
         saveRecipes();
         scenes.get(0).updateUI();
     }
@@ -185,17 +207,11 @@ public class UIManager {
     }
 
 
-    public static void openRecipeOverview(Recipe recipe)
+    public void openRecipeOverview(Recipe recipe)
     {
         scenes.get(1).openRecipe(recipe);
+        showScene(1);
     }
-
-
-
-
-
-
-
 
 
 
@@ -230,8 +246,6 @@ public class UIManager {
         {
             System.out.println("Already on scene " + sceneIndex);
         }
-
-
     }
 
     public int getCurrentSceneIndex() {

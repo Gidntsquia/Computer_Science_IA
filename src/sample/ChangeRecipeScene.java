@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -35,6 +36,9 @@ public class ChangeRecipeScene extends Screen{
     // There will be a dropdown menu to add/remove ingredients
     public void openChangeRecipeUI()
     {
+        // This scene has a unique top UI.
+
+
         // ChangeRecipeUI = overall UI
         // leftUI = all left UI
         // ingredientMenus = ingredients in left UI
@@ -46,7 +50,6 @@ public class ChangeRecipeScene extends Screen{
 
         HBox rightUI = new HBox();
 
-        recipeNameField = new TextField(currentRecipe.getName());
         ingredients = currentRecipe.getIngredients();
         for(int i = 0; i < ingredients.size(); i++)
         {
@@ -59,17 +62,15 @@ public class ChangeRecipeScene extends Screen{
             procedureFields.add(new TextField(currentRecipe.getProcedures().get(i)));
             procedureFieldsUI.getChildren().add(procedureFields.get(i));
         }
-        defaultServedField = new TextField(String.valueOf(currentRecipe.getDefaultServed()));
-
-        Button addIngredientBtn = new Button("+ Add Ingredient");
-        addIngredientBtn.setOnAction(event -> {
-
-        });
         Button addProcedureBtn = new Button("+ Add Procedure");
         addProcedureBtn.setOnAction(event -> {
             procedureFields.add(new TextField());
             procedureFieldsUI.getChildren().add(procedureFields.get(procedureFields.size() - 1));
         });
+
+        defaultServedField = new TextField(String.valueOf(currentRecipe.getDefaultServed()));
+
+
 
         leftUI.setSpacing(10);
 
@@ -154,6 +155,7 @@ public class ChangeRecipeScene extends Screen{
     @Override
     public void runBirthMethods()
     {
+        refreshGeneralUI();
         Ingredient potato = new Ingredient("Potato", 5, "cups", "starchy");
         Ingredient tomato = new Ingredient("Tomato", 2, "cups", "acidic");
         ArrayList<Ingredient> basicIngredients = new ArrayList<>();
@@ -177,8 +179,8 @@ public class ChangeRecipeScene extends Screen{
     @Override
     public void saveRecipe()
     {
-        // TODO need to make it where you can change name of Recipe
         currentRecipe.setName(recipeNameField.getText());
+
         // Ingredients
 
         currentRecipe.setProcedures(getStringsFromTextFields(procedureFields));
@@ -198,6 +200,29 @@ public class ChangeRecipeScene extends Screen{
     public void setRecipe(Recipe recipe)
     {
         this.currentRecipe = recipe;
+    }
+
+    @Override
+    protected HBox createTopUI()
+    {
+        HBox topUI = new HBox();
+        // Creates the search bar at the top of the UI.
+        String searchText = "";
+        Label nameLabel = new Label("Changing: ");
+        recipeNameField = new TextField(currentRecipe.getName());
+
+
+        TextField searchBar = new TextField();
+        Button searchBtn = new Button("Search");
+        searchBtn.setOnAction(event -> {
+            searchBar.clear();
+        });
+
+        topUI.getChildren().addAll(nameLabel, recipeNameField, searchBar, searchBtn);
+        topUI.setPadding(new Insets(20, 5, 0,100));
+        topUI.setSpacing(5);
+
+        return topUI;
     }
 
 

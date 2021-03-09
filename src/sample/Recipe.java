@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -20,6 +21,8 @@ public class Recipe {
     public Recipe(String recipeName)
     {
         name = recipeName;
+        ingredients = new ArrayList<>(0);
+        procedures = new ArrayList<>(0);
     }
 
     public Recipe(String recipeName, ArrayList<Ingredient> recipeIngredients, ArrayList<String> recipeProcedures, int recipeDefaultServed, int recipeDaysSinceLastAccess)
@@ -52,11 +55,15 @@ public class Recipe {
     public String getIngredientList()
     {
         String list = "";
-        for(int i = 0; i < ingredients.size(); i++)
+        if(ingredients != null)
         {
-            // Numbered list [1. , 2., 3. ...] with a plural version of the ingredient name.
-            list += (i + 1) + ". " + ingredients.get(i) + "s\n";
+            for(int i = 0; i < ingredients.size(); i++)
+            {
+                // Numbered list [1. , 2., 3. ...] with a plural version of the ingredient name.
+                list += (i + 1) + ". " + ingredients.get(i) + "s\n";
+            }
         }
+
         return list;
     }
 
@@ -79,66 +86,72 @@ public class Recipe {
     public String getOverview()
     {
         String summaryText = "Using ";
-
-        // Iterates through all ingredients, adding each ingredient's name to the string representation of ingredients.
-        // Hard coded functionality for if there are only 1 or 2 ingredients.
-        if(ingredients.size() == 1)
+        if(ingredients != null)
         {
-            summaryText += ingredients.get(0).getName().toLowerCase() + "s, ";
-        }
-        else if(ingredients.size() == 2)
-        {
-            summaryText += ingredients.get(0).getName().toLowerCase() + "s ";
-            summaryText += "and " + ingredients.get(1).getName().toLowerCase() + "s, ";
-        }
-        else
-        {
-            for(int i = 0; i < ingredients.size(); i++)
+            // Iterates through all ingredients, adding each ingredient's name to the string representation of ingredients.
+            // Hard coded functionality for if there are only 1 or 2 ingredients.
+            if(ingredients.size() == 1)
             {
-                if(i == ingredients.size() - 1)
+                summaryText += ingredients.get(0).getName().toLowerCase() + "s, ";
+            }
+            else if(ingredients.size() == 2)
+            {
+                summaryText += ingredients.get(0).getName().toLowerCase() + "s ";
+                summaryText += "and " + ingredients.get(1).getName().toLowerCase() + "s, ";
+            }
+            else
+            {
+                for(int i = 0; i < ingredients.size(); i++)
                 {
-                    summaryText += "and " + ingredients.get(i).getName().toLowerCase() + "s, ";
-                }
-                else
-                {
-                    summaryText += ingredients.get(i).getName().toLowerCase() + "s, ";
-                }
+                    if(i == ingredients.size() - 1)
+                    {
+                        summaryText += "and " + ingredients.get(i).getName().toLowerCase() + "s, ";
+                    }
+                    else
+                    {
+                        summaryText += ingredients.get(i).getName().toLowerCase() + "s, ";
+                    }
 
 
+                }
             }
         }
 
-        // Iterates through all procedures, adding each procedure's name to the string representation of procedures.
-        // Hard coded functionality for if there are only 1 or 2 procedures.
-        if(procedures.size() == 1)
+        if(procedures != null)
         {
-            summaryText += procedures.get(0).toLowerCase() + ". ";
-        }
-        else if(procedures.size() == 2)
-        {
-            summaryText += procedures.get(0).toLowerCase() + " ";
-            summaryText += "and then " + procedures.get(1).toLowerCase() + ".";
-        }
-        else
-        {
-            for(int i = 0; i < procedures.size(); i++)
+            // Iterates through all procedures, adding each procedure's name to the string representation of procedures.
+            // Hard coded functionality for if there are only 1 or 2 procedures.
+            if(procedures.size() == 1)
             {
-                if(i == procedures.size() - 1)
+                summaryText += procedures.get(0).toLowerCase() + ". ";
+            }
+            else if(procedures.size() == 2)
+            {
+                summaryText += procedures.get(0).toLowerCase() + " ";
+                summaryText += "and then " + procedures.get(1).toLowerCase() + ".";
+            }
+            else
+            {
+                for(int i = 0; i < procedures.size(); i++)
                 {
-                    summaryText += "and then " + procedures.get(i).toLowerCase() + ".";
-                }
-                else
-                {
-                    summaryText += procedures.get(i).toLowerCase() + ", ";
+                    if(i == procedures.size() - 1)
+                    {
+                        summaryText += "and then " + procedures.get(i).toLowerCase() + ".";
+                    }
+                    else
+                    {
+                        summaryText += procedures.get(i).toLowerCase() + ", ";
+                    }
                 }
             }
         }
+
 
         return summaryText;
     }
 
 
-    public GridPane getRecipeBoxUI()
+    public GridPane getRecipeBoxUI(EventHandler deleteEvent, EventHandler viewEvent)
     {
         //TODO add black border to this.
         GridPane recipeBoxUI = new GridPane();
@@ -148,11 +161,7 @@ public class Recipe {
         // TODO this should increase in size as the window increases in size.
         viewRecipeBtn.setPrefSize(200, 100);
 
-        // TODO probably a better way to do this.
-        viewRecipeBtn.setOnAction(event -> {
-            UIManager.openRecipeOverview(this);
-            UIManager.showScene(1);
-        });
+        viewRecipeBtn.setOnAction(viewEvent);
 
 
         recipeBoxUI.add(viewRecipeBtn, 0, 0);
@@ -161,6 +170,7 @@ public class Recipe {
         // TODO make this red correctly.
         Button deleteBtn = new Button("Delete");
         deleteBtn.setStyle("-fx-background-color: pink;");
+        deleteBtn.setOnAction(deleteEvent);
 
         rightBoxUI.getChildren().add(deleteBtn);
         rightBoxUI.getChildren().add(new Label("People served: " + this.getDefaultServed()));
