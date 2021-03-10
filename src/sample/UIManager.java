@@ -14,11 +14,13 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class UIManager {
     public static Stage stage;
-    public static ArrayList<Recipe> recipes = new ArrayList<>();
+    protected static ArrayList<Recipe> recipes = new ArrayList<>();
     protected static ArrayList<Screen> scenes = new ArrayList<>();
     protected static int currentSceneIndex;
     protected static BorderPane root;
@@ -42,6 +44,23 @@ public class UIManager {
         TextField searchBar = new TextField();
         Button searchBtn = new Button("Search");
         searchBtn.setOnAction(event -> {
+            System.out.println(searchBar.getText());
+            for(int i = 0; i < recipes.size(); i++)
+            {
+                System.out.println(recipes.get(i).getName() + ": " + recipes.get(i).compareTo(new Recipe(""), searchBar.getText()));
+            }
+
+            recipes.sort((o1, o2)
+                    -> o1.compareTo(
+                    o2, searchBar.getText()));
+
+            scenes.get(0).updateUI();
+            if(currentSceneIndex != 0)
+            {
+                showScene(0);
+            }
+
+
             searchBar.clear();
         });
 

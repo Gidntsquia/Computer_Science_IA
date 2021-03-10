@@ -8,6 +8,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class Recipe {
     private String name;
@@ -79,6 +80,11 @@ public class Recipe {
         }
         return list;
     }
+
+    public int getDaysSinceLastAccess() {
+        return daysSinceLastAccess;
+    }
+
     public int getDefaultServed() {
         return defaultServed;
     }
@@ -204,6 +210,15 @@ public class Recipe {
     // TODO implement this
     public void setImage(Image image) {
         this.image = image;
+    }
+
+    public int compareTo(Recipe other, String searchText)
+    {
+        if(this.getName() == null || this.getName().equals(""))
+        {
+            return 100000;
+        }
+        return (int)((Math.abs(searchText.compareTo(this.getName()) * 5)) + this.getDaysSinceLastAccess()) * 2 - (int)(Math.abs(searchText.compareTo(other.getName()) * 5) + other.getDaysSinceLastAccess() * 2);
     }
 
     public String toString()
