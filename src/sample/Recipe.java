@@ -6,9 +6,14 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import org.apache.commons.codec.language.Soundex;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.similarity.FuzzyScore;
+
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Locale;
 
 public class Recipe {
     private String name;
@@ -218,7 +223,11 @@ public class Recipe {
         {
             return 100000;
         }
-        return (int)((Math.abs(searchText.compareTo(this.getName()) * 5)) + this.getDaysSinceLastAccess()) * 2 - (int)(Math.abs(searchText.compareTo(other.getName()) * 5) + other.getDaysSinceLastAccess() * 2);
+        FuzzyScore myFuzzball = new FuzzyScore(Locale.US);
+        return myFuzzball.fuzzyScore(other.getName(), searchText) - myFuzzball.fuzzyScore(this.getName(), searchText);
+
+        // return (int) StringUtils.getLevenshteinDistance(other.getName(), searchText) - (int) StringUtils.getLevenshteinDistance(this.getName(), searchText);
+        //return (int) searchText.compareToIgnoreCase(this.getName()) - (int) searchText.compareToIgnoreCase(other.getName());
     }
 
     public String toString()

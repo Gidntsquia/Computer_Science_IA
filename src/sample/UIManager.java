@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Scanner;
+import org.apache.commons.lang3.StringUtils;
+
+
 
 public class UIManager {
     public static Stage stage;
@@ -42,26 +45,12 @@ public class UIManager {
         String searchText = "";
         Label recipesLabel = new Label("Recipes");
         TextField searchBar = new TextField();
+        searchBar.setOnAction(event -> {
+            searchRecipes(searchBar);
+        });
         Button searchBtn = new Button("Search");
         searchBtn.setOnAction(event -> {
-            System.out.println(searchBar.getText());
-            for(int i = 0; i < recipes.size(); i++)
-            {
-                System.out.println(recipes.get(i).getName() + ": " + recipes.get(i).compareTo(new Recipe(""), searchBar.getText()));
-            }
-
-            recipes.sort((o1, o2)
-                    -> o1.compareTo(
-                    o2, searchBar.getText()));
-
-            scenes.get(0).updateUI();
-            if(currentSceneIndex != 0)
-            {
-                showScene(0);
-            }
-
-
-            searchBar.clear();
+            searchRecipes(searchBar);
         });
 
         topUI.getChildren().addAll(recipesLabel, searchBar, searchBtn);
@@ -159,6 +148,31 @@ public class UIManager {
         return leftUI;
     }
 
+    private void searchRecipes(TextField searchBar)
+    {
+        /*
+        //System.out.println(searchBar.getText());
+        for(int i = 0; i < recipes.size(); i++)
+        {
+            System.out.println(recipes.get(i).getName() + ": " + recipes.get(i).compareTo(new Recipe(""), searchBar.getText()));
+            for(int j = 0; j < recipes.size(); j++)
+            {
+                if(i != j)
+                {
+                    System.out.println(recipes.get(i).getName() + " and " + recipes.get(j).getName() + ": " + ((int)((Math.abs(searchBar.getText().compareTo(recipes.get(i).getName()) * 5)) + recipes.get(i).getDaysSinceLastAccess()) * 2 - (int)(Math.abs(searchBar.getText().compareTo(recipes.get(j).getName()) * 5) + recipes.get(j).getDaysSinceLastAccess() * 2)));
+                }
+            }
+        }
+        System.out.println();
+        */
+        recipes.sort((o1, o2)
+                -> o1.compareTo(o2, searchBar.getText()));
+        scenes.get(0).updateUI();
+        if(currentSceneIndex != 0)
+        {
+            showScene(0);
+        }
+    }
 
     protected void refreshGeneralUI()
     {
