@@ -1,6 +1,9 @@
 package sample;
 
+import org.apache.commons.text.similarity.FuzzyScore;
+
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class Ingredient {
     public static ArrayList<Ingredient> allIngredients = new ArrayList<>();
@@ -80,22 +83,14 @@ public class Ingredient {
         quantity = defaultQuantity;
     }
 
-    public double compare(Ingredient other)
+    public int compareTo(Ingredient other)
     {
-        // TODO- add Pseudocode, expand this compare to include things one letter off
-        // Compare different variables and return a value from 0 to 1.
-        if(this.getName().equals(other.getName()))
+        if(this.getName() == null || this.getName().equals(""))
         {
-            return 1;
+            return 100000;
         }
-        else if(this.getFlavor().equals(other.getFlavor()))
-        {
-            return 0.5;
-        }
-        else
-        {
-            return 0;
-        }
+        FuzzyScore fuzzySearch = new FuzzyScore(Locale.US);
+        return fuzzySearch.fuzzyScore(this.getName(), other.getName());
     }
 
     public static void addIngredientToList(Ingredient ingredientToBeAdded)

@@ -2,6 +2,7 @@ package sample;
 
 import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -13,10 +14,8 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Scanner;
+import java.util.*;
+
 import org.apache.commons.lang3.StringUtils;
 
 
@@ -25,6 +24,9 @@ public class UIManager {
     public static Stage stage;
     protected static ArrayList<Recipe> recipes = new ArrayList<>();
     protected static ArrayList<Screen> scenes = new ArrayList<>();
+    private ArrayList<Node> homeNodes = new ArrayList<>();
+    private ArrayList<Node> overviewNodes = new ArrayList<>();
+    private ArrayList<Node> changeRecipeNodes = new ArrayList<>();
     protected static int currentSceneIndex;
     protected static BorderPane root;
 
@@ -33,54 +35,11 @@ public class UIManager {
     {
         currentSceneIndex = -1;
         root = new BorderPane();
-
-    }
-
-
-
-    protected HBox createTopUI()
-    {
-        HBox topUI = new HBox();
-        // Creates the search bar at the top of the UI.
-        String searchText = "";
-        Label recipesLabel = new Label("Recipes");
-        TextField searchBar = new TextField();
-        searchBar.setOnAction(event -> {
-            searchRecipes(searchBar);
-        });
-        Button searchBtn = new Button("Search");
-        searchBtn.setOnAction(event -> {
-            searchRecipes(searchBar);
-        });
-
-        topUI.getChildren().addAll(recipesLabel, searchBar, searchBtn);
-        topUI.setPadding(new Insets(20, 5, 0,100));
-        topUI.setSpacing(5);
-
-        return topUI;
-    }
-
-
-    private VBox createLeftUI()
-    {
-        // Creates the pane for this side.
-        VBox leftUI = new VBox();
-
         // Creates the buttons on the left side of the UI.
         Button homeBtn = new Button("Home");
         homeBtn.setOnAction(event -> {
             showScene(0);
         });
-
-        /*
-        // Change this to add recipe button later.
-        Button viewRecipeBtn = new Button("View Recipe");
-        viewRecipeBtn.setOnAction(event -> {
-            showScene(1);
-        });
-
-
-         */
 
         Button changeRecipeBtn = new Button("Change Recipe");
         changeRecipeBtn.setOnAction(event -> {
@@ -106,7 +65,8 @@ public class UIManager {
 
         Button deleteBtn = new Button("Delete");
         deleteBtn.setOnAction(event -> {
-            deleteRecipe(recipes.size() - 1);
+            deleteRecipe(scenes.get(currentSceneIndex).getRecipe());
+            showScene(0);
         });
 
         Button saveBtn = new Button("Save");
@@ -140,9 +100,51 @@ public class UIManager {
                 showScene(0);
             }
         });
+        homeNodes = new ArrayList<>(Arrays.asList(homeBtn, newRecipeBtn, quitBtn));
+        overviewNodes = new ArrayList<>(Arrays.asList(homeBtn, newRecipeBtn, changeRecipeBtn, deleteBtn, saveBtn, cancelBtn));
+        changeRecipeNodes = new ArrayList<>(Arrays.asList(homeBtn, saveBtn, cancelBtn));
+    }
+
+
+
+    protected HBox createTopUI()
+    {
+        HBox topUI = new HBox();
+        // Creates the search bar at the top of the UI.
+        String searchText = "";
+        Label recipesLabel = new Label("Recipes");
+        TextField searchBar = new TextField();
+        searchBar.setOnAction(event -> {
+            showScene(0);
+            searchRecipes(searchBar);
+        });
+        Button searchBtn = new Button("Search");
+        searchBtn.setOnAction(event -> {
+            showScene(0);
+            searchRecipes(searchBar);
+        });
+
+        topUI.getChildren().addAll(recipesLabel, searchBar, searchBtn);
+        topUI.setPadding(new Insets(20, 5, 0,100));
+        topUI.setSpacing(5);
+
+        return topUI;
+    }
+
+
+    private VBox createLeftUI(ArrayList<Node> nodes)
+    {
+        // Creates the pane for this side.
+        VBox leftUI = new VBox();
+
+
 
         // Assigns functionality to the buttons.
-        leftUI.getChildren().addAll(homeBtn, changeRecipeBtn, newRecipeBtn, deleteBtn, saveBtn, quitBtn);
+        for(Node node : nodes)
+        {
+            leftUI.getChildren().add(node);
+        }
+
         leftUI.setSpacing(10);
 
         return leftUI;
@@ -150,21 +152,7 @@ public class UIManager {
 
     private void searchRecipes(TextField searchBar)
     {
-        /*
-        //System.out.println(searchBar.getText());
-        for(int i = 0; i < recipes.size(); i++)
-        {
-            System.out.println(recipes.get(i).getName() + ": " + recipes.get(i).compareTo(new Recipe(""), searchBar.getText()));
-            for(int j = 0; j < recipes.size(); j++)
-            {
-                if(i != j)
-                {
-                    System.out.println(recipes.get(i).getName() + " and " + recipes.get(j).getName() + ": " + ((int)((Math.abs(searchBar.getText().compareTo(recipes.get(i).getName()) * 5)) + recipes.get(i).getDaysSinceLastAccess()) * 2 - (int)(Math.abs(searchBar.getText().compareTo(recipes.get(j).getName()) * 5) + recipes.get(j).getDaysSinceLastAccess() * 2)));
-                }
-            }
-        }
-        System.out.println();
-        */
+
         recipes.sort((o1, o2)
                 -> o1.compareTo(o2, searchBar.getText()));
         scenes.get(0).updateUI();
@@ -177,7 +165,19 @@ public class UIManager {
     protected void refreshGeneralUI()
     {
         root.setTop(createTopUI());
-        root.setLeft(createLeftUI());
+        if(currentSceneIndex == 0)
+        {
+            root.setLeft(createLeftUI(homeNodes));
+        }
+        else if(currentSceneIndex == 1)
+        {
+            root.setLeft(createLeftUI(overviewNodes));
+        }
+        else
+        {
+            root.setLeft(createLeftUI(changeRecipeNodes));
+        }
+
     }
 
 
@@ -257,16 +257,17 @@ public class UIManager {
     // 0    - Home
     // 1    - Recipe Overview
     // 2    - Change Recipe
-    public static void showScene(int sceneIndex)
+    public void showScene(int sceneIndex)
     {
         if(sceneIndex != currentSceneIndex)
         {
             if(sceneIndex < scenes.size() && sceneIndex >= 0)
             {
+                currentSceneIndex = sceneIndex;
+                refreshGeneralUI();
                 scenes.get(sceneIndex).runBirthMethods();
                 scenes.get(sceneIndex).updateUI();
                 root.setCenter(scenes.get(sceneIndex).getUI());
-                currentSceneIndex = sceneIndex;
                 stage.setTitle(scenes.get(currentSceneIndex).getTitle());
 
             }

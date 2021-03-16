@@ -223,8 +223,8 @@ public class Recipe {
         {
             return 100000;
         }
-        FuzzyScore myFuzzball = new FuzzyScore(Locale.US);
-        return myFuzzball.fuzzyScore(other.getName(), searchText) - myFuzzball.fuzzyScore(this.getName(), searchText);
+        FuzzyScore fuzzySearch = new FuzzyScore(Locale.US);
+        return fuzzySearch.fuzzyScore(other.getName(), searchText) - fuzzySearch.fuzzyScore(this.getName(), searchText);
 
         // return (int) StringUtils.getLevenshteinDistance(other.getName(), searchText) - (int) StringUtils.getLevenshteinDistance(this.getName(), searchText);
         //return (int) searchText.compareToIgnoreCase(this.getName()) - (int) searchText.compareToIgnoreCase(other.getName());
