@@ -79,9 +79,8 @@ public class Ingredient implements Serializable {
         name = ingredientName;
     }
 
-    public void setQuantity(double ingredientQuantity, String ingredientUnits) {
+    public void setQuantity(double ingredientQuantity) {
         quantity = ingredientQuantity;
-        units = ingredientUnits;
     }
 
     public void setBooleans(boolean isVegetable, boolean isFruit, boolean isMeat, boolean isSavory, boolean isSweet, boolean isVegan, boolean isLactoseFree, boolean isGlutenFree)

@@ -10,9 +10,9 @@ import java.util.Arrays;
 
 public class ChangeRecipeScene extends Screen{
     private Recipe currentRecipe;
-    private Ingredient currentIngredient;
     private TextField recipeNameField;
     private ArrayList<Ingredient> ingredients;
+    private ArrayList<TextField> ingredientQuantityFields;
     private VBox ingredientMenusUI;
     private ArrayList<TextField> procedureFields;
     private TextField defaultServedField;
@@ -61,6 +61,7 @@ public class ChangeRecipeScene extends Screen{
         BorderPane changeRecipeUI = new BorderPane();
         VBox leftUI = new VBox();
         ingredientMenusUI = new VBox();
+        ingredientQuantityFields = new ArrayList<>();
         VBox procedureFieldsUI = new VBox();
 
         HBox rightUI = new HBox();
@@ -68,7 +69,7 @@ public class ChangeRecipeScene extends Screen{
         ingredients = currentRecipe.getIngredients();
         for(int i = 0; i < ingredients.size(); i++)
         {
-            ingredientMenusUI.getChildren().add(getIngredientLine(ingredients.get(i), i));
+            ingredientMenusUI.getChildren().add(getIngredientLine(i));
         }
 
         procedureFields = new ArrayList<>();
@@ -117,14 +118,14 @@ public class ChangeRecipeScene extends Screen{
     public MenuButton getChangeIngredientDropdown(int lineIndex)
     {
         // Adds all ingredients ever created to a dropdown menu.
-        MenuButton ingredientDropdown = new MenuButton(" + Ingredients", null);
+        MenuButton ingredientDropdown = new MenuButton("+ Ingredients", null);
         for(int i = 0; i < Ingredient.allIngredients.size(); i++)
         {
             ingredientDropdown.getItems().add(new MenuItem(Ingredient.allIngredients.get(i).getName()));
             int finalI = i;
             ingredientDropdown.getItems().get(i).setOnAction(event -> {
                 ingredients.set(lineIndex, Ingredient.copyIngredient(Ingredient.allIngredients.get(finalI)));
-                ingredientMenusUI.getChildren().set(lineIndex, getIngredientLine(ingredients.get(lineIndex), lineIndex));
+                ingredientMenusUI.getChildren().set(lineIndex, getIngredientLine(lineIndex));
             });
         }
         return ingredientDropdown;
@@ -133,26 +134,42 @@ public class ChangeRecipeScene extends Screen{
     public MenuButton getNewIngredientDropdown()
     {
         // Adds all ingredients ever created to a dropdown menu
-        MenuButton ingredientDropdown = new MenuButton(" + Ingredients", null);
+        MenuButton ingredientDropdown = new MenuButton("New Ingredient", null);
         for(int i = 0; i < Ingredient.allIngredients.size(); i++)
         {
             ingredientDropdown.getItems().add(new MenuItem(Ingredient.allIngredients.get(i).getName()));
             int finalI = i;
             ingredientDropdown.getItems().get(i).setOnAction(event -> {
                 ingredients.add(Ingredient.allIngredients.get(finalI));
-                ingredientMenusUI.getChildren().add(getIngredientLine(Ingredient.allIngredients.get(finalI), ingredients.size() - 1));
+                ingredientMenusUI.getChildren().add(getIngredientLine(ingredients.size() - 1));
             });
         }
         return ingredientDropdown;
     }
 
-    public HBox getIngredientLine(Ingredient ingredient, int lineIndex)
+    public HBox getIngredientLine(int lineIndex)
     {
-        HBox ingredientAndSelector = new HBox();
-        ingredientAndSelector.getChildren().add(new Label(ingredient.getName()));
-        ingredientAndSelector.getChildren().add(getChangeIngredientDropdown(lineIndex));
+        HBox ingredientLine = new HBox(5);
 
-        return ingredientAndSelector;
+        TextField quantityField = new TextField();
+        quantityField.setText(String.valueOf(ingredients.get(lineIndex).getQuantity()));
+        quantityField.setMaxWidth(50);
+        ingredientQuantityFields.add(lineIndex, quantityField);
+        Button deleteBtn = new Button("Delete");
+        deleteBtn.setOnAction(event -> {
+            ingredients.remove(lineIndex);
+            ingredientQuantityFields.remove(lineIndex);
+            ingredientMenusUI.getChildren().remove(lineIndex);
+        });
+
+        ingredientLine.getChildren().add(new Label(ingredients.get(lineIndex).getName()));
+        ingredientLine.getChildren().add((ingredientQuantityFields.get(lineIndex)));
+        ingredientLine.getChildren().add(new Label(ingredients.get(lineIndex).getUnits()));
+        ingredientLine.getChildren().add(deleteBtn);
+
+        ingredientLine.getChildren().add(getChangeIngredientDropdown(lineIndex));
+
+        return ingredientLine;
     }
 
     @Override
@@ -174,6 +191,10 @@ public class ChangeRecipeScene extends Screen{
         currentRecipe.setName(recipeNameField.getText());
 
         // Ingredients
+        for(int i = 0; i < ingredientQuantityFields.size(); i++)
+        {
+            ingredients.get(i).setQuantity(Double.valueOf(ingredientQuantityFields.get(i).getText()));
+        }
 
         currentRecipe.setProcedures(getStringsFromTextFields(procedureFields));
         currentRecipe.setDefaultServed(Integer.parseInt(defaultServedField.getText()));

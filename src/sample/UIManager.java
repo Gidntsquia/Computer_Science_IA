@@ -86,7 +86,6 @@ public class UIManager {
                 // Save recipe that is currently being changed if on change recipe screen.
                 scenes.get(2).saveInfo();
 
-                System.out.println(creatingNewRecipe);
                 if (creatingNewRecipe) {
                     addRecipe(scenes.get(2).getRecipe());
                     creatingNewRecipe = false;

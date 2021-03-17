@@ -19,6 +19,7 @@ import java.util.Locale;
 public class Recipe implements Serializable {
     private String name;
     private ArrayList<Ingredient> ingredients;
+    //private ArrayList<Double> ingredientQuantities;
     private ArrayList<String> procedures;
     private int defaultServed;
     private Image image;
