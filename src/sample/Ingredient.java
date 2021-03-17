@@ -2,10 +2,11 @@ package sample;
 
 import org.apache.commons.text.similarity.FuzzyScore;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class Ingredient {
+public class Ingredient implements Serializable {
     public static ArrayList<Ingredient> allIngredients = new ArrayList<>();
     private String name;
     private double quantity;

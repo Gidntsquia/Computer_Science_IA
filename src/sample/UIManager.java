@@ -11,28 +11,26 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.Writer;
+import java.io.*;
 import java.util.*;
-
-import org.apache.commons.lang3.StringUtils;
-
 
 
 public class UIManager {
     public static Stage stage;
     protected static ArrayList<Recipe> recipes = new ArrayList<>();
     protected static ArrayList<Screen> scenes = new ArrayList<>();
-    private ArrayList<Node> homeNodes = new ArrayList<>();
-    private ArrayList<Node> overviewNodes = new ArrayList<>();
-    private ArrayList<Node> changeRecipeNodes = new ArrayList<>();
+    private ArrayList<Node> homeNodes;
+    private ArrayList<Node> overviewNodes;
+    private ArrayList<Node> changeRecipeNodes;
+    protected ArrayList<Node> normalTopNodes;
+    protected ArrayList<Node> changeRecipeTopNodes;
     protected static int currentSceneIndex;
     protected static BorderPane root;
 
 
     public UIManager()
     {
+        downloadRecipes();
         currentSceneIndex = -1;
         root = new BorderPane();
         // Creates the buttons on the left side of the UI.
@@ -46,9 +44,11 @@ public class UIManager {
             // Only works if on Recipe Overview screen.
             if(currentSceneIndex == 1)
             {
+
                 scenes.get(2).setRecipe(scenes.get(1).getRecipe());
                 showScene(2);
             }
+
 
         });
 
@@ -57,7 +57,6 @@ public class UIManager {
             Recipe newRecipe = new Recipe("");
             newRecipe.setProcedures(new ArrayList<String>(1));
             newRecipe.setIngredients(new ArrayList<Ingredient>(1));
-            addRecipe(newRecipe);
             scenes.get(2).setRecipe(newRecipe);
             showScene(2);
 
@@ -74,17 +73,24 @@ public class UIManager {
             if(getCurrentSceneIndex() == 0)
             {
                 // Save all recipes if on home screen
-                // Add a recipe to the home scene UI
-                addRecipe(new Recipe("New recipe!"));
+                saveRecipes();
             }
             else if(getCurrentSceneIndex() == 2)
             {
                 // Save recipe that is currently being changed if on change recipe screen.
                 scenes.get(2).saveRecipe();
+                addRecipe(scenes.get(2).getRecipe());
+                saveRecipes();
                 showScene(0);
             }
 
         });
+
+        Button downloadBtn = new Button("Download");
+        downloadBtn.setOnAction(event -> {
+            downloadRecipes();
+        });
+
         Button cancelBtn = new Button("Cancel");
         cancelBtn.setOnAction(event -> {
             showScene(0);
@@ -103,13 +109,8 @@ public class UIManager {
         homeNodes = new ArrayList<>(Arrays.asList(homeBtn, newRecipeBtn, quitBtn));
         overviewNodes = new ArrayList<>(Arrays.asList(homeBtn, newRecipeBtn, changeRecipeBtn, deleteBtn, saveBtn, cancelBtn));
         changeRecipeNodes = new ArrayList<>(Arrays.asList(homeBtn, saveBtn, cancelBtn));
-    }
 
 
-
-    protected HBox createTopUI()
-    {
-        HBox topUI = new HBox();
         // Creates the search bar at the top of the UI.
         String searchText = "";
         Label recipesLabel = new Label("Recipes");
@@ -124,7 +125,20 @@ public class UIManager {
             searchRecipes(searchBar);
         });
 
-        topUI.getChildren().addAll(recipesLabel, searchBar, searchBtn);
+        normalTopNodes = new ArrayList<>(Arrays.asList(recipesLabel,searchBar, searchBtn));
+        changeRecipeTopNodes = new ArrayList<>();
+    }
+
+
+
+    protected HBox createTopUI(ArrayList<Node> nodes)
+    {
+        HBox topUI = new HBox();
+        for(Node node : nodes)
+        {
+            topUI.getChildren().add(node);
+        }
+
         topUI.setPadding(new Insets(20, 5, 0,100));
         topUI.setSpacing(5);
 
@@ -164,17 +178,20 @@ public class UIManager {
 
     protected void refreshGeneralUI()
     {
-        root.setTop(createTopUI());
+
         if(currentSceneIndex == 0)
         {
+            root.setTop(createTopUI(normalTopNodes));
             root.setLeft(createLeftUI(homeNodes));
         }
         else if(currentSceneIndex == 1)
         {
+            root.setTop(createTopUI(normalTopNodes));
             root.setLeft(createLeftUI(overviewNodes));
         }
         else
         {
+            root.setTop(createTopUI(changeRecipeTopNodes));
             root.setLeft(createLeftUI(changeRecipeNodes));
         }
 
@@ -217,11 +234,7 @@ public class UIManager {
     private void downloadRecipes()
     {
         try{
-            Scanner s = new Scanner(new File("output.txt"));
-            while(s.hasNextLine())
-            {
-                System.out.println(s.nextLine());
-            }
+            recipes = new ArrayList<>(readFileRecipes());
         }catch(Exception myException){System.out.println(myException);}
     }
 
@@ -229,14 +242,25 @@ public class UIManager {
     {
         try{
             Writer w = new FileWriter("output.txt", false);
-            for(Recipe recipe : recipes)
-            {
-                w.write(recipe.toString() + "\n");
-            }
-            w.close();
+            writeRecipes(new HashSet<Recipe>(recipes));
+
 
         }catch(Exception myException) {System.out.println(myException);}
 
+    }
+
+    public static void writeRecipes(Set<Recipe> recipes) throws IOException {
+        try (FileOutputStream os = new FileOutputStream("output.txt");
+             ObjectOutputStream oos = new ObjectOutputStream(os)) {
+            oos.writeObject(recipes);
+        }
+    }
+
+    public static Set<Recipe> readFileRecipes() throws IOException, ClassNotFoundException {
+        try (FileInputStream is = new FileInputStream("output.txt");
+             ObjectInputStream ois = new ObjectInputStream(is)) {
+            return (Set<Recipe>) ois.readObject();
+        }
     }
 
 

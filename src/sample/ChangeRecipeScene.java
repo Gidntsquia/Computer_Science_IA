@@ -7,6 +7,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ChangeRecipeScene extends Screen{
     private Recipe currentRecipe;
@@ -36,6 +37,21 @@ public class ChangeRecipeScene extends Screen{
     // There will be a dropdown menu to add/remove ingredients
     public void openChangeRecipeUI()
     {
+
+        if(currentRecipe.getName().equals(""))
+        {
+            Label nameLabel = new Label("Name");
+            recipeNameField = new TextField(currentRecipe.getName());
+            changeRecipeTopNodes = new ArrayList<>(Arrays.asList(nameLabel, recipeNameField));
+            refreshGeneralUI();
+        }
+        else
+        {
+            Label nameLabel = new Label("Changing: ");
+            recipeNameField = new TextField(currentRecipe.getName());
+            changeRecipeTopNodes = new ArrayList<>(Arrays.asList(nameLabel, recipeNameField));
+            refreshGeneralUI();
+        }
         // This scene has a unique top UI.
 
 
@@ -75,7 +91,7 @@ public class ChangeRecipeScene extends Screen{
         leftUI.setSpacing(10);
 
         leftUI.getChildren().addAll(new Label("Ingredients"), ingredientMenusUI, getNewIngredientDropdown(), new Label("Procedures"), procedureFieldsUI, addProcedureBtn);
-        rightUI.getChildren().addAll(new Label("Serves Default: "), defaultServedField);
+        rightUI.getChildren().addAll(new Label("Serves: "), defaultServedField);
 
         changeRecipeUI.setLeft(leftUI);
         changeRecipeUI.setRight(rightUI);
@@ -83,12 +99,6 @@ public class ChangeRecipeScene extends Screen{
 
 
         setUI(changeRecipeUI);
-
-    }
-
-    // This will work the same as change recipe, except that it will populate the textfields with nothing.
-    public void openCreateRecipeUI()
-    {
 
     }
 
@@ -200,29 +210,6 @@ public class ChangeRecipeScene extends Screen{
     public void setRecipe(Recipe recipe)
     {
         this.currentRecipe = recipe;
-    }
-
-    @Override
-    protected HBox createTopUI()
-    {
-        HBox topUI = new HBox();
-        // Creates the search bar at the top of the UI.
-        String searchText = "";
-        Label nameLabel = new Label("Changing: ");
-        recipeNameField = new TextField(currentRecipe.getName());
-
-
-        TextField searchBar = new TextField();
-        Button searchBtn = new Button("Search");
-        searchBtn.setOnAction(event -> {
-            searchBar.clear();
-        });
-
-        topUI.getChildren().addAll(nameLabel, recipeNameField, searchBar, searchBtn);
-        topUI.setPadding(new Insets(20, 5, 0,100));
-        topUI.setSpacing(5);
-
-        return topUI;
     }
 
 

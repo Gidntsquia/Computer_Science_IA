@@ -11,11 +11,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.similarity.FuzzyScore;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Locale;
 
-public class Recipe {
+public class Recipe implements Serializable {
     private String name;
     private ArrayList<Ingredient> ingredients;
     private ArrayList<String> procedures;
@@ -161,7 +162,6 @@ public class Recipe {
         return summaryText;
     }
 
-
     public GridPane getRecipeBoxUI(EventHandler deleteEvent, EventHandler viewEvent)
     {
         //TODO add black border to this.
@@ -224,12 +224,24 @@ public class Recipe {
             return 100000;
         }
         FuzzyScore fuzzySearch = new FuzzyScore(Locale.US);
-        return fuzzySearch.fuzzyScore(other.getName(), searchText) - fuzzySearch.fuzzyScore(this.getName(), searchText);
+        int ingredientsCloseness1 = 0;
+        for(Ingredient ingredient : this.getIngredients())
+        {
+            ingredientsCloseness1 += fuzzySearch.fuzzyScore(ingredient.getName(), searchText);
+        }
+        int ingredientsCloseness2 = 0;
+        for(Ingredient ingredient : other.getIngredients())
+        {
+            ingredientsCloseness2 += fuzzySearch.fuzzyScore(ingredient.getName(), searchText);
+        }
+
+        return (fuzzySearch.fuzzyScore(other.getName(), searchText) + ingredientsCloseness2)  - (fuzzySearch.fuzzyScore(this.getName(), searchText) + ingredientsCloseness1);
 
         // return (int) StringUtils.getLevenshteinDistance(other.getName(), searchText) - (int) StringUtils.getLevenshteinDistance(this.getName(), searchText);
         //return (int) searchText.compareToIgnoreCase(this.getName()) - (int) searchText.compareToIgnoreCase(other.getName());
     }
 
+    @Override
     public String toString()
     {
         String recipeOverview = "";
@@ -243,4 +255,21 @@ public class Recipe {
         return recipeOverview;
 
     }
+
+    /*
+    public String toString()
+    {
+        String recipeOverview = "";
+        recipeOverview += name + "\n";
+        recipeOverview += "Ingredients: \n";
+        if(this.ingredients != null)
+        {
+            recipeOverview += getIngredientList();
+        }
+
+        return recipeOverview;
+
+    }
+
+     */
 }
