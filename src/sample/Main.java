@@ -19,6 +19,21 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+        try{
+            File recipesFile = new File("recipes.txt");
+            File ingredientsFile = new File("ingredients.txt");
+            if(!recipesFile.isFile())
+            {
+                System.out.println("Recipe file created");
+                recipesFile.createNewFile();
+            }
+            if(!ingredientsFile.isFile())
+            {
+
+                System.out.println("Ingredients file created");
+                ingredientsFile.createNewFile();
+            }
+        }catch (Exception e){System.out.println(e);}
         Screen.stage = primaryStage;
         UIManager.stage = primaryStage;
         BorderPane root = new BorderPane();
@@ -29,16 +44,19 @@ public class Main extends Application {
         HomeScene homeScene = new HomeScene("Home");
         RecipeOverviewScene recipeOverviewScene = new RecipeOverviewScene("Recipe Overview");
         ChangeRecipeScene changeRecipeScene = new ChangeRecipeScene("Change Recipe");
+        ChangeIngredientScene changeIngredientScene = new ChangeIngredientScene("Change Ingredient");
 
         UI.addScene(homeScene);
         UI.addScene(recipeOverviewScene);
         UI.addScene(changeRecipeScene);
+        UI.addScene(changeIngredientScene);
 
         Ingredient potato = new Ingredient("Potato", 5, "cups", "starchy");
         Ingredient tomato = new Ingredient("Tomato", 2, "cups", "acidic");
+        /*
         Ingredient.addIngredientToList(potato);
         Ingredient.addIngredientToList(tomato);
-
+         */
         ArrayList<Ingredient> basicIngredients = new ArrayList<>();
         basicIngredients.add(potato);
         basicIngredients.add(tomato);

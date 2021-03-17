@@ -1,6 +1,5 @@
 package sample;
 
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -11,6 +10,7 @@ import java.util.Arrays;
 
 public class ChangeRecipeScene extends Screen{
     private Recipe currentRecipe;
+    private Ingredient currentIngredient;
     private TextField recipeNameField;
     private ArrayList<Ingredient> ingredients;
     private VBox ingredientMenusUI;
@@ -37,7 +37,7 @@ public class ChangeRecipeScene extends Screen{
     // There will be a dropdown menu to add/remove ingredients
     public void openChangeRecipeUI()
     {
-
+        // This scene has a unique top UI.
         if(currentRecipe.getName().equals(""))
         {
             Label nameLabel = new Label("Name");
@@ -52,7 +52,6 @@ public class ChangeRecipeScene extends Screen{
             changeRecipeTopNodes = new ArrayList<>(Arrays.asList(nameLabel, recipeNameField));
             refreshGeneralUI();
         }
-        // This scene has a unique top UI.
 
 
         // ChangeRecipeUI = overall UI
@@ -166,28 +165,11 @@ public class ChangeRecipeScene extends Screen{
     public void runBirthMethods()
     {
         refreshGeneralUI();
-        Ingredient potato = new Ingredient("Potato", 5, "cups", "starchy");
-        Ingredient tomato = new Ingredient("Tomato", 2, "cups", "acidic");
-        ArrayList<Ingredient> basicIngredients = new ArrayList<>();
-        basicIngredients.add(potato);
-        basicIngredients.add(tomato);
-
-
-        String method1 = "Skin the potato";
-        String method2 = "Wash the tomato";
-        String method3 = "Put it all together";
-        ArrayList<String> basicMethods = new ArrayList<>();
-        basicMethods.add(method1);
-        basicMethods.add(method2);
-        basicMethods.add(method3);
-
-        Recipe recipe = new Recipe("Sample Recipe", basicIngredients, basicMethods, 651, 3);
-
         openChangeRecipeUI();
     }
 
     @Override
-    public void saveRecipe()
+    public void saveInfo()
     {
         currentRecipe.setName(recipeNameField.getText());
 

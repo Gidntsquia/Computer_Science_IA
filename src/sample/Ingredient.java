@@ -20,6 +20,7 @@ public class Ingredient implements Serializable {
     private boolean isSweet;
     private boolean isVegan;
     private boolean isLactoseFree;
+    private boolean isGlutenFree;
 
 
     public Ingredient(String ingredientName)
@@ -33,6 +34,13 @@ public class Ingredient implements Serializable {
 
     }
 
+    public Ingredient(String ingredientName, String units, String flavor)
+    {
+        this.name = ingredientName;
+        this.units = units;
+        this.flavor = flavor;
+    }
+
     public Ingredient(String ingredientName, double ingredientDefaultQuanitity, String ingredientUnits, String ingredientFlavor)
     {
         name = ingredientName;
@@ -44,6 +52,8 @@ public class Ingredient implements Serializable {
 
 
     }
+
+
 
     public String getName() {
         return name;
@@ -72,6 +82,18 @@ public class Ingredient implements Serializable {
     public void setQuantity(double ingredientQuantity, String ingredientUnits) {
         quantity = ingredientQuantity;
         units = ingredientUnits;
+    }
+
+    public void setBooleans(boolean isVegetable, boolean isFruit, boolean isMeat, boolean isSavory, boolean isSweet, boolean isVegan, boolean isLactoseFree, boolean isGlutenFree)
+    {
+        this.isVegetable = isVegetable;
+        this.isFruit = isFruit;
+        this.isMeat = isMeat;
+        this.isSavory = isSavory;
+        this.isSweet = isSweet;
+        this.isVegan = isVegan;
+        this.isLactoseFree = isLactoseFree;
+        this.isGlutenFree = isGlutenFree;
     }
 
     public void multiplyQuantity(double multiplier)

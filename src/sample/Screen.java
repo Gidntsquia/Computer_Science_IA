@@ -1,15 +1,7 @@
 package sample;
 
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 // This is the base class for all scenes used in this project.
@@ -33,7 +25,7 @@ public class Screen extends UIManager{
 
     public void runBirthMethods() { /*This command is empty because it is overriden by the child classes.*/ }
 
-    public void saveRecipe() { /*This command is empty because it is overriden by the child classes.*/ }
+    public void saveInfo() { /*This command is empty because it is overriden by the child classes.*/ }
 
     public void setRecipe(Recipe recipe) { /*This command is empty because it is overriden by the child classes.*/ }
 
@@ -41,6 +33,14 @@ public class Screen extends UIManager{
     {
         /*This command is empty because it is overriden by the child classes.*/
         return new Recipe("[Blank Recipe]");
+    }
+
+    public void setIngredient(Ingredient ingredient) { /*This command is empty because it is overriden by the child classes.*/ };
+
+    public Ingredient getIngredient()
+    {
+        /*This command is empty because it is overriden by the child classes.*/
+        return new Ingredient("[Blank Ingredient]");
     }
 
     public ScrollPane getUI()

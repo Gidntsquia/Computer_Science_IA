@@ -3,6 +3,7 @@ package sample;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -26,6 +27,8 @@ public class UIManager {
     protected ArrayList<Node> changeRecipeTopNodes;
     protected static int currentSceneIndex;
     protected static BorderPane root;
+    private static boolean creatingNewRecipe = false;
+
 
 
     public UIManager()
@@ -42,8 +45,7 @@ public class UIManager {
         Button changeRecipeBtn = new Button("Change Recipe");
         changeRecipeBtn.setOnAction(event -> {
             // Only works if on Recipe Overview screen.
-            if(currentSceneIndex == 1)
-            {
+            if (currentSceneIndex == 1) {
 
                 scenes.get(2).setRecipe(scenes.get(1).getRecipe());
                 showScene(2);
@@ -54,12 +56,19 @@ public class UIManager {
 
         Button newRecipeBtn = new Button("New Recipe");
         newRecipeBtn.setOnAction(event -> {
+            creatingNewRecipe = true;
             Recipe newRecipe = new Recipe("");
             newRecipe.setProcedures(new ArrayList<String>(1));
             newRecipe.setIngredients(new ArrayList<Ingredient>(1));
             scenes.get(2).setRecipe(newRecipe);
             showScene(2);
 
+        });
+
+        Button newIngredientBtn = new Button("New Ingredient");
+        newIngredientBtn.setOnAction(event -> {
+            scenes.get(3).setIngredient(new Ingredient(""));
+            showScene(3);
         });
 
         Button deleteBtn = new Button("Delete");
@@ -70,16 +79,23 @@ public class UIManager {
 
         Button saveBtn = new Button("Save");
         saveBtn.setOnAction(event -> {
-            if(getCurrentSceneIndex() == 0)
-            {
+            if (getCurrentSceneIndex() == 0) {
                 // Save all recipes if on home screen
                 saveRecipes();
-            }
-            else if(getCurrentSceneIndex() == 2)
-            {
+            } else if (getCurrentSceneIndex() == 2) {
                 // Save recipe that is currently being changed if on change recipe screen.
-                scenes.get(2).saveRecipe();
-                addRecipe(scenes.get(2).getRecipe());
+                scenes.get(2).saveInfo();
+
+                System.out.println(creatingNewRecipe);
+                if (creatingNewRecipe) {
+                    addRecipe(scenes.get(2).getRecipe());
+                    creatingNewRecipe = false;
+                }
+                saveRecipes();
+                showScene(0);
+            } else if (getCurrentSceneIndex() == 3) {
+                scenes.get(3).saveInfo();
+                addIngredient(scenes.get(3).getIngredient());
                 saveRecipes();
                 showScene(0);
             }
@@ -97,16 +113,13 @@ public class UIManager {
         });
         Button quitBtn = new Button("Quit");
         quitBtn.setOnAction(event -> {
-            if(currentSceneIndex == 0)
-            {
+            if (currentSceneIndex == 0) {
                 Platform.exit();
-            }
-            else
-            {
+            } else {
                 showScene(0);
             }
         });
-        homeNodes = new ArrayList<>(Arrays.asList(homeBtn, newRecipeBtn, quitBtn));
+        homeNodes = new ArrayList<>(Arrays.asList(homeBtn, newRecipeBtn, newIngredientBtn, quitBtn));
         overviewNodes = new ArrayList<>(Arrays.asList(homeBtn, newRecipeBtn, changeRecipeBtn, deleteBtn, saveBtn, cancelBtn));
         changeRecipeNodes = new ArrayList<>(Arrays.asList(homeBtn, saveBtn, cancelBtn));
 
@@ -125,8 +138,9 @@ public class UIManager {
             searchRecipes(searchBar);
         });
 
-        normalTopNodes = new ArrayList<>(Arrays.asList(recipesLabel,searchBar, searchBtn));
+        normalTopNodes = new ArrayList<>(Arrays.asList(recipesLabel, searchBar, searchBtn));
         changeRecipeTopNodes = new ArrayList<>();
+
     }
 
 
@@ -191,6 +205,7 @@ public class UIManager {
         }
         else
         {
+            // This is for both Change Recipe and Change Ingredient
             root.setTop(createTopUI(changeRecipeTopNodes));
             root.setLeft(createLeftUI(changeRecipeNodes));
         }
@@ -235,14 +250,17 @@ public class UIManager {
     {
         try{
             recipes = new ArrayList<>(readFileRecipes());
+            Ingredient.allIngredients = new ArrayList<>(readFileIngredients());
         }catch(Exception myException){System.out.println(myException);}
     }
 
     private void saveRecipes()
     {
         try{
-            Writer w = new FileWriter("output.txt", false);
-            writeRecipes(new HashSet<Recipe>(recipes));
+            Writer w1 = new FileWriter("recipes.txt", false);
+            Writer w2 = new FileWriter("ingredients.txt", false);
+            writeRecipes(new HashSet<>(recipes));
+            writeIngredients(new HashSet<>(Ingredient.allIngredients));
 
 
         }catch(Exception myException) {System.out.println(myException);}
@@ -250,19 +268,37 @@ public class UIManager {
     }
 
     public static void writeRecipes(Set<Recipe> recipes) throws IOException {
-        try (FileOutputStream os = new FileOutputStream("output.txt");
+        try (FileOutputStream os = new FileOutputStream("recipes.txt");
              ObjectOutputStream oos = new ObjectOutputStream(os)) {
             oos.writeObject(recipes);
         }
     }
 
     public static Set<Recipe> readFileRecipes() throws IOException, ClassNotFoundException {
-        try (FileInputStream is = new FileInputStream("output.txt");
+        try (FileInputStream is = new FileInputStream("recipes.txt");
              ObjectInputStream ois = new ObjectInputStream(is)) {
             return (Set<Recipe>) ois.readObject();
         }
     }
 
+    public static void writeIngredients(Set<Ingredient> ingredients) throws IOException {
+        try (FileOutputStream os = new FileOutputStream("ingredients.txt");
+             ObjectOutputStream oos = new ObjectOutputStream(os)) {
+            oos.writeObject(ingredients);
+        }
+    }
+
+    public static Set<Ingredient> readFileIngredients() throws IOException, ClassNotFoundException {
+        try (FileInputStream is = new FileInputStream("ingredients.txt");
+             ObjectInputStream ois = new ObjectInputStream(is)) {
+            return (Set<Ingredient>) ois.readObject();
+        }
+    }
+
+    public void addIngredient(Ingredient ingredientToBeAdded)
+    {
+        Ingredient.allIngredients.add(ingredientToBeAdded);
+    }
 
     public void openRecipeOverview(Recipe recipe)
     {
@@ -281,6 +317,7 @@ public class UIManager {
     // 0    - Home
     // 1    - Recipe Overview
     // 2    - Change Recipe
+    // 3    - Change Ingredient
     public void showScene(int sceneIndex)
     {
         if(sceneIndex != currentSceneIndex)
