@@ -76,8 +76,12 @@ public class UIManager {
             if(currentSceneIndex == 3)
             {
                 Ingredient.allIngredients.remove(scenes.get(currentSceneIndex).getIngredient());
+                saveRecipes();
             }
-            deleteRecipe(scenes.get(currentSceneIndex).getRecipe());
+            else
+            {
+                deleteRecipe(scenes.get(currentSceneIndex).getRecipe());
+            }
             showScene(0);
         });
 
@@ -193,6 +197,7 @@ public class UIManager {
             ingredientMenuItems.get(i).setOnAction(event -> {
                 creatingNewIngredient = false;
                 scenes.get(3).setIngredient(Ingredient.allIngredients.get(finalI));
+                scenes.get(3).runBirthMethods();
                 showScene(3);
             });
         }
