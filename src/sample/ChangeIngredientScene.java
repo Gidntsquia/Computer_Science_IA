@@ -8,14 +8,18 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class ChangeIngredientScene extends Screen{
     private Ingredient currentIngredient;
     private TextField ingredientNameField;
     private TextField flavorField;
     private TextField unitsField;
+    private HashMap<String, CheckBox> checkBoxes;
+    /*
     private CheckBox isVegetableBox;
     private CheckBox isFruitBox;
     private CheckBox isMeatBox;
@@ -25,10 +29,14 @@ public class ChangeIngredientScene extends Screen{
     private CheckBox isLactoseFreeBox;
     private CheckBox isGlutenFreeBox;
 
+     */
+
     public ChangeIngredientScene(String screenName) {
         super(screenName);
+
         flavorField = new TextField();
         unitsField = new TextField();
+        /*
         isVegetableBox = new CheckBox();
         isFruitBox = new CheckBox();
         isMeatBox = new CheckBox();
@@ -38,6 +46,23 @@ public class ChangeIngredientScene extends Screen{
         isLactoseFreeBox = new CheckBox();
         isGlutenFreeBox = new CheckBox();
 
+
+
+         */
+/*
+        checkBoxes.put("Vegetable?", isVegetableBox);
+        checkBoxes.put("Fruit?", isFruitBox);
+        checkBoxes.put("Meat?", isMeatBox);
+        checkBoxes.put("Savory?", isSavoryBox);
+        checkBoxes.put("Sweet?", isSweetBox);
+        checkBoxes.put("Vegan", isVeganBox);
+        checkBoxes.put("Lactose Free?", isLactoseFreeBox);
+        checkBoxes.put("Gluten Free?", isGlutenFreeBox);
+
+
+
+ */
+
     }
 
 
@@ -45,8 +70,10 @@ public class ChangeIngredientScene extends Screen{
     {
 
         // This scene has a unique top UI.
+        // Ingredient name will be "" if it is a new ingredient.
         if(currentIngredient.getName().equals(""))
         {
+            // Code for new ingredient
             Label nameLabel = new Label("Name");
             ingredientNameField = new TextField(currentIngredient.getName());
             changeRecipeTopNodes = new ArrayList<>(Arrays.asList(nameLabel, ingredientNameField));
@@ -54,6 +81,7 @@ public class ChangeIngredientScene extends Screen{
         }
         else
         {
+            // Code for changing existing ingredient
             Label nameLabel = new Label("Changing:");
             ingredientNameField = new TextField(currentIngredient.getName());
             changeRecipeTopNodes = new ArrayList<>(Arrays.asList(nameLabel, ingredientNameField));
@@ -63,16 +91,30 @@ public class ChangeIngredientScene extends Screen{
 
         BorderPane changeIngredientUI = new BorderPane();
         VBox leftUI = new VBox();
+        flavorField.setText(currentIngredient.getFlavor());
+        unitsField.setText(currentIngredient.getUnits());
+
         leftUI.getChildren().add(getUILine("Flavor:", flavorField));
         leftUI.getChildren().add(getUILine("Units:", unitsField));
-        leftUI.getChildren().add(getUILine("Vegetable?", isVegetableBox));
-        leftUI.getChildren().add(getUILine("Fruit?", isFruitBox));
-        leftUI.getChildren().add(getUILine("Meat?", isMeatBox));
-        leftUI.getChildren().add(getUILine("Savory?", isSavoryBox));
-        leftUI.getChildren().add(getUILine("Sweet?", isSweetBox));
-        leftUI.getChildren().add(getUILine("Vegan?", isVeganBox));
-        leftUI.getChildren().add(getUILine("Is Lactose Free?", isLactoseFreeBox));
-        leftUI.getChildren().add(getUILine("Is Gluten Free?", isGlutenFreeBox));
+
+        checkBoxes = new HashMap<>();
+        String key;
+
+        for(int i = 0; i < Ingredient.allDescriptors.size(); i++)
+        {
+            key = Ingredient.allDescriptors.get(i);
+            CheckBox newDescriptor = new CheckBox();
+            newDescriptor.setSelected(currentIngredient.getDescriptors().get(key));
+            checkBoxes.put(key + "?", newDescriptor);
+        }
+        for(String lineKey : checkBoxes.keySet())
+        {
+
+            leftUI.getChildren().add(getUILine(lineKey, checkBoxes.get(lineKey)));
+
+
+        }
+
 
 
         changeIngredientUI.setLeft(leftUI);
@@ -103,8 +145,19 @@ public class ChangeIngredientScene extends Screen{
     @Override
     public void saveInfo()
     {
-        currentIngredient = new Ingredient(ingredientNameField.getText(), unitsField.getText(), flavorField.getText());
-        currentIngredient.setBooleans(isVegetableBox.isSelected(), isFruitBox.isSelected(), isMeatBox.isSelected(), isSavoryBox.isSelected(), isSweetBox.isSelected(), isVeganBox.isSelected(), isLactoseFreeBox.isSelected(), isGlutenFreeBox.isSelected());
+
+        // Adds ingredient if it is a new ingredient. Otherwise, it replaces the original one.
+        if(UIManager.creatingNewIngredient)
+        {
+            currentIngredient = new Ingredient(ingredientNameField.getText(), unitsField.getText(), flavorField.getText());
+            Ingredient.allIngredients.add(currentIngredient);
+        }
+        else
+        {
+            Ingredient.allIngredients.set(Ingredient.allIngredients.indexOf(currentIngredient), new Ingredient(ingredientNameField.getText(), unitsField.getText(), flavorField.getText()));
+        }
+
+        currentIngredient.setBooleans(checkBoxes);
 
     }
 

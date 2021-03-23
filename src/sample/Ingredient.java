@@ -1,27 +1,23 @@
 package sample;
 
+import javafx.scene.control.CheckBox;
 import org.apache.commons.text.similarity.FuzzyScore;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Locale;
 
 public class Ingredient implements Serializable {
     public static ArrayList<Ingredient> allIngredients = new ArrayList<>();
+    public static ArrayList<String> allDescriptors = new ArrayList<>(Arrays.asList("Vegetable", "Fruit", "Meat", "Savory", "Sweet", "Vegan", "Lactose Free", "Gluten Free"));
+    public HashMap<String, Boolean> descriptors = new HashMap<>();
     private String name;
     private double quantity;
     private double defaultQuantity;
     private String units;
     private String flavor;
-    private boolean isVegetable;
-    private boolean isFruit;
-    private boolean isMeat;
-    private boolean isSavory;
-    private boolean isSweet;
-    private boolean isVegan;
-    private boolean isLactoseFree;
-    private boolean isGlutenFree;
-
 
     public Ingredient(String ingredientName)
     {
@@ -29,6 +25,7 @@ public class Ingredient implements Serializable {
         defaultQuantity = 0;
         quantity = defaultQuantity;
         units = "cups";
+        initializeBooleans();
 
 
 
@@ -39,6 +36,7 @@ public class Ingredient implements Serializable {
         this.name = ingredientName;
         this.units = units;
         this.flavor = flavor;
+        initializeBooleans();
     }
 
     public Ingredient(String ingredientName, double ingredientDefaultQuanitity, String ingredientUnits, String ingredientFlavor)
@@ -48,6 +46,7 @@ public class Ingredient implements Serializable {
         quantity = defaultQuantity;
         units = ingredientUnits;
         flavor = ingredientFlavor;
+        initializeBooleans();
 
 
 
@@ -75,6 +74,10 @@ public class Ingredient implements Serializable {
         return flavor;
     }
 
+    public HashMap<String, Boolean> getDescriptors() {
+        return descriptors;
+    }
+
     public void setName(String ingredientName) {
         name = ingredientName;
     }
@@ -83,16 +86,31 @@ public class Ingredient implements Serializable {
         quantity = ingredientQuantity;
     }
 
-    public void setBooleans(boolean isVegetable, boolean isFruit, boolean isMeat, boolean isSavory, boolean isSweet, boolean isVegan, boolean isLactoseFree, boolean isGlutenFree)
+    public void setBooleans(Boolean... booleans) //boolean isVegetable, boolean isFruit, boolean isMeat, boolean isSavory, boolean isSweet, boolean isVegan, boolean isLactoseFree, boolean isGlutenFree)
     {
-        this.isVegetable = isVegetable;
-        this.isFruit = isFruit;
-        this.isMeat = isMeat;
-        this.isSavory = isSavory;
-        this.isSweet = isSweet;
-        this.isVegan = isVegan;
-        this.isLactoseFree = isLactoseFree;
-        this.isGlutenFree = isGlutenFree;
+        for(int i = 0; i < allDescriptors.size(); i++)
+        {
+            this.descriptors.replace(allDescriptors.get(i), booleans[i]);
+        }
+    }
+
+    public void setBooleans(HashMap<String, CheckBox> booleans)
+    {
+        this.descriptors.clear();
+        for(String key : booleans.keySet())
+        {
+            this.descriptors.put(key.substring(0, key.length() - 1), booleans.get(key).isSelected());
+
+        }
+    }
+
+    // Converts ArrayList of Strings to HashMap with Strings and corresponding booleans.
+    public void initializeBooleans()
+    {
+        for(String descriptor : allDescriptors)
+        {
+            descriptors.put(descriptor, false);
+        }
     }
 
     public void multiplyQuantity(double multiplier)

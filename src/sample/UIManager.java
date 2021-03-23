@@ -3,10 +3,7 @@ package sample;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -27,7 +24,8 @@ public class UIManager {
     protected ArrayList<Node> changeRecipeTopNodes;
     protected static int currentSceneIndex;
     protected static BorderPane root;
-    private static boolean creatingNewRecipe = false;
+    protected static boolean creatingNewRecipe = false;
+    protected static boolean creatingNewIngredient = false;
 
 
 
@@ -67,12 +65,18 @@ public class UIManager {
 
         Button newIngredientBtn = new Button("New Ingredient");
         newIngredientBtn.setOnAction(event -> {
+            creatingNewIngredient = true;
             scenes.get(3).setIngredient(new Ingredient(""));
             showScene(3);
+
         });
 
         Button deleteBtn = new Button("Delete");
         deleteBtn.setOnAction(event -> {
+            if(currentSceneIndex == 3)
+            {
+                Ingredient.allIngredients.remove(scenes.get(currentSceneIndex).getIngredient());
+            }
             deleteRecipe(scenes.get(currentSceneIndex).getRecipe());
             showScene(0);
         });
@@ -94,7 +98,6 @@ public class UIManager {
                 showScene(0);
             } else if (getCurrentSceneIndex() == 3) {
                 scenes.get(3).saveInfo();
-                addIngredient(scenes.get(3).getIngredient());
                 saveRecipes();
                 showScene(0);
             }
@@ -120,7 +123,7 @@ public class UIManager {
         });
         homeNodes = new ArrayList<>(Arrays.asList(homeBtn, newRecipeBtn, newIngredientBtn, quitBtn));
         overviewNodes = new ArrayList<>(Arrays.asList(homeBtn, newRecipeBtn, changeRecipeBtn, deleteBtn, saveBtn, cancelBtn));
-        changeRecipeNodes = new ArrayList<>(Arrays.asList(homeBtn, saveBtn, cancelBtn));
+        changeRecipeNodes = new ArrayList<>(Arrays.asList(homeBtn, deleteBtn, saveBtn, cancelBtn));
 
 
         // Creates the search bar at the top of the UI.
@@ -177,6 +180,32 @@ public class UIManager {
         return leftUI;
     }
 
+    public VBox createRightUI()
+    {
+        VBox rightUI = new VBox();
+        MenuButton ingredientList = new MenuButton("Ingredients");
+        ArrayList<MenuItem> ingredientMenuItems = new ArrayList<>();
+        for(int i = 0; i < Ingredient.allIngredients.size(); i++)
+        {
+
+            ingredientMenuItems.add(new MenuItem(Ingredient.allIngredients.get(i).getName()));
+            int finalI = i;
+            ingredientMenuItems.get(i).setOnAction(event -> {
+                creatingNewIngredient = false;
+                scenes.get(3).setIngredient(Ingredient.allIngredients.get(finalI));
+                showScene(3);
+            });
+        }
+        for(MenuItem ingredient : ingredientMenuItems)
+        {
+            ingredientList.getItems().add(ingredient);
+
+        }
+        rightUI.getChildren().add(ingredientList);
+
+        return rightUI;
+    }
+
     private void searchRecipes(TextField searchBar)
     {
 
@@ -191,7 +220,7 @@ public class UIManager {
 
     protected void refreshGeneralUI()
     {
-
+        root.setRight(createRightUI());
         if(currentSceneIndex == 0)
         {
             root.setTop(createTopUI(normalTopNodes));
@@ -258,39 +287,39 @@ public class UIManager {
         try{
             Writer w1 = new FileWriter("recipes.txt", false);
             Writer w2 = new FileWriter("ingredients.txt", false);
-            writeRecipes(new HashSet<>(recipes));
-            writeIngredients(new HashSet<>(Ingredient.allIngredients));
+            writeRecipes(recipes);
+            writeIngredients(Ingredient.allIngredients);
 
 
         }catch(Exception myException) {System.out.println(myException);}
 
     }
 
-    public static void writeRecipes(Set<Recipe> recipes) throws IOException {
+    public static void writeRecipes(List<Recipe> recipes) throws IOException {
         try (FileOutputStream os = new FileOutputStream("recipes.txt");
              ObjectOutputStream oos = new ObjectOutputStream(os)) {
             oos.writeObject(recipes);
         }
     }
 
-    public static Set<Recipe> readFileRecipes() throws IOException, ClassNotFoundException {
+    public static List<Recipe> readFileRecipes() throws IOException, ClassNotFoundException {
         try (FileInputStream is = new FileInputStream("recipes.txt");
              ObjectInputStream ois = new ObjectInputStream(is)) {
-            return (Set<Recipe>) ois.readObject();
+            return (List<Recipe>) ois.readObject();
         }
     }
 
-    public static void writeIngredients(Set<Ingredient> ingredients) throws IOException {
+    public static void writeIngredients(List<Ingredient> ingredients) throws IOException {
         try (FileOutputStream os = new FileOutputStream("ingredients.txt");
              ObjectOutputStream oos = new ObjectOutputStream(os)) {
             oos.writeObject(ingredients);
         }
     }
 
-    public static Set<Ingredient> readFileIngredients() throws IOException, ClassNotFoundException {
+    public static List<Ingredient> readFileIngredients() throws IOException, ClassNotFoundException {
         try (FileInputStream is = new FileInputStream("ingredients.txt");
              ObjectInputStream ois = new ObjectInputStream(is)) {
-            return (Set<Ingredient>) ois.readObject();
+            return (List<Ingredient>) ois.readObject();
         }
     }
 
