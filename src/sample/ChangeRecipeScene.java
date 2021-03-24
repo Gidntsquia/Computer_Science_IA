@@ -53,6 +53,9 @@ public class ChangeRecipeScene extends Screen{
             refreshGeneralUI();
         }
 
+        Label overviewLabel = new Label("Overview\n" + currentRecipe.getOverview());
+        overviewLabel.setWrapText(true);
+        overviewLabel.setMaxWidth(450);
 
         // ChangeRecipeUI = overall UI
         // leftUI = all left UI
@@ -95,7 +98,7 @@ public class ChangeRecipeScene extends Screen{
 
         changeRecipeUI.setLeft(leftUI);
         changeRecipeUI.setRight(rightUI);
-        changeRecipeUI.setTop(new Label("Overview\n" + currentRecipe.getOverview()));
+        changeRecipeUI.setTop(overviewLabel);
 
 
         setUI(changeRecipeUI);
@@ -199,8 +202,8 @@ public class ChangeRecipeScene extends Screen{
         currentRecipe.setProcedures(getStringsFromTextFields(procedureFields));
         currentRecipe.setDefaultServed(Integer.parseInt(defaultServedField.getText()));
 
-        // Sets most recent access day to today.
-        currentRecipe.setDaysSinceLastAccess(0);
+        // Sets most recent access time to right now.
+        currentRecipe.updateLastAccessToNow();
     }
 
     @Override

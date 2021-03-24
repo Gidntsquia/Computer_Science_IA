@@ -6,14 +6,13 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import org.apache.commons.codec.language.Soundex;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.similarity.FuzzyScore;
 
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Locale;
 
 public class Recipe implements Serializable {
@@ -23,7 +22,7 @@ public class Recipe implements Serializable {
     private ArrayList<String> procedures;
     private int defaultServed;
     private Image image;
-    private int daysSinceLastAccess;
+    private LocalDateTime lastAccessTime;
 
 
     public Recipe(String recipeName)
@@ -33,22 +32,22 @@ public class Recipe implements Serializable {
         procedures = new ArrayList<>(0);
     }
 
-    public Recipe(String recipeName, ArrayList<Ingredient> recipeIngredients, ArrayList<String> recipeProcedures, int recipeDefaultServed, int recipeDaysSinceLastAccess)
+    public Recipe(String recipeName, ArrayList<Ingredient> recipeIngredients, ArrayList<String> recipeProcedures, int recipeDefaultServed)
     {
        name = recipeName;
        ingredients = recipeIngredients;
        procedures = recipeProcedures;
        defaultServed = recipeDefaultServed;
-       daysSinceLastAccess = recipeDaysSinceLastAccess;
+       lastAccessTime = LocalDateTime.now();
     }
 
-    public Recipe(String recipeName, ArrayList<Ingredient> recipeIngredients, ArrayList<String> recipeProcedures, int recipeDefaultServed, int recipeDaysSinceLastAccess, Image recipeImage)
+    public Recipe(String recipeName, ArrayList<Ingredient> recipeIngredients, ArrayList<String> recipeProcedures, int recipeDefaultServed, Image recipeImage)
     {
         name = recipeName;
         ingredients = recipeIngredients;
         procedures = recipeProcedures;
         defaultServed = recipeDefaultServed;
-        daysSinceLastAccess = recipeDaysSinceLastAccess;
+        lastAccessTime = LocalDateTime.now();
         image = recipeImage;
     }
 
@@ -88,8 +87,8 @@ public class Recipe implements Serializable {
         return list;
     }
 
-    public int getDaysSinceLastAccess() {
-        return daysSinceLastAccess;
+    public LocalDateTime getLastAccessTime() {
+        return lastAccessTime;
     }
 
     public int getDefaultServed() {
@@ -205,8 +204,8 @@ public class Recipe implements Serializable {
         this.procedures = procedures;
     }
 
-    public void setDaysSinceLastAccess(int daysSinceLastAccess) {
-        this.daysSinceLastAccess = daysSinceLastAccess;
+    public void setLastAccessTime(LocalDateTime lastAccessTime) {
+        this.lastAccessTime = lastAccessTime;
     }
 
     public void setDefaultServed(int defaultServed) {
@@ -240,6 +239,11 @@ public class Recipe implements Serializable {
 
         // return (int) StringUtils.getLevenshteinDistance(other.getName(), searchText) - (int) StringUtils.getLevenshteinDistance(this.getName(), searchText);
         //return (int) searchText.compareToIgnoreCase(this.getName()) - (int) searchText.compareToIgnoreCase(other.getName());
+    }
+
+    public void updateLastAccessToNow()
+    {
+        lastAccessTime = LocalDateTime.now();
     }
 
     @Override

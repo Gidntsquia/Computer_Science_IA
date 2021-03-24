@@ -11,7 +11,7 @@ import java.util.Locale;
 
 public class Ingredient implements Serializable {
     public static ArrayList<Ingredient> allIngredients = new ArrayList<>();
-    public static ArrayList<String> allDescriptors = new ArrayList<>(Arrays.asList("Vegetable", "Fruit", "Meat", "Savory", "Sweet", "Vegan", "Lactose Free", "Gluten Free"));
+    public static ArrayList<String> allDescriptors = new ArrayList<>(Arrays.asList("Vegetable", "Fruit", "Meat", "Savory", "Sweet", "Vegan", "Lactose Free", "Gluten Free", "Starchy"));
     public HashMap<String, Boolean> descriptors = new HashMap<>();
     private String name;
     private double quantity;
@@ -109,6 +109,7 @@ public class Ingredient implements Serializable {
     {
         for(String descriptor : allDescriptors)
         {
+            //System.out.println(descriptor);
             descriptors.put(descriptor, false);
         }
     }

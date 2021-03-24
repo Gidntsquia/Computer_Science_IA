@@ -18,7 +18,7 @@ public class ChangeIngredientScene extends Screen{
     private TextField ingredientNameField;
     private TextField flavorField;
     private TextField unitsField;
-    private HashMap<String, CheckBox> checkBoxes;
+    private HashMap<String, CheckBox> checkBoxes = new HashMap<>();
     /*
     private CheckBox isVegetableBox;
     private CheckBox isFruitBox;
@@ -99,11 +99,13 @@ public class ChangeIngredientScene extends Screen{
 
         checkBoxes = new HashMap<>();
         String key;
-
+        System.out.println(Ingredient.allDescriptors.size());
         for(int i = 0; i < Ingredient.allDescriptors.size(); i++)
         {
+
             key = Ingredient.allDescriptors.get(i);
             CheckBox newDescriptor = new CheckBox();
+            System.out.println(i + ": " + key);
             newDescriptor.setSelected(currentIngredient.getDescriptors().get(key));
             checkBoxes.put(key + "?", newDescriptor);
         }
@@ -118,7 +120,7 @@ public class ChangeIngredientScene extends Screen{
 
 
         changeIngredientUI.setLeft(leftUI);
-        leftUI.setSpacing(50);
+        leftUI.setSpacing(25);
 
         setUI(changeIngredientUI);
 

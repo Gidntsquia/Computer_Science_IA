@@ -8,12 +8,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Scanner;
+import java.sql.Time;
+import java.util.*;
 
 import static sample.UIManager.recipes;
+import java.time.*;
+import java.util.concurrent.TimeUnit;
 
 public class Main extends Application {
 
@@ -62,6 +62,7 @@ public class Main extends Application {
         basicIngredients.add(tomato);
 
 
+
         String method1 = "Skin the potato";
         String method2 = "Wash the tomato";
         String method3 = "Put it all together";
@@ -70,6 +71,11 @@ public class Main extends Application {
         basicMethods.add(method2);
         basicMethods.add(method3);
 
+        LocalDateTime time = LocalDateTime.now();
+        TimeUnit.SECONDS.sleep(1);
+        System.out.println("Hello");
+        LocalDateTime time2 = LocalDateTime.now();
+        System.out.println(time2.compareTo(time));
 
         //UI.addRecipe(new Recipe("Recipe 1", new ArrayList<>(basicIngredients), new ArrayList<>(basicMethods), 10, 0));
         //UI.addRecipe(new Recipe("Recipe 2", new ArrayList<>(basicIngredients), new ArrayList<>(basicMethods), 1, 5));

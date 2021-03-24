@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.util.*;
+import java.time.*;
 
 
 public class UIManager {
@@ -37,6 +38,7 @@ public class UIManager {
         // Creates the buttons on the left side of the UI.
         Button homeBtn = new Button("Home");
         homeBtn.setOnAction(event -> {
+            sortRecipesByLastAccess();
             showScene(0);
         });
 
@@ -115,6 +117,7 @@ public class UIManager {
 
         Button cancelBtn = new Button("Cancel");
         cancelBtn.setOnAction(event -> {
+            sortRecipesByLastAccess();
             showScene(0);
         });
         Button quitBtn = new Button("Quit");
@@ -122,6 +125,7 @@ public class UIManager {
             if (currentSceneIndex == 0) {
                 Platform.exit();
             } else {
+                sortRecipesByLastAccess();
                 showScene(0);
             }
         });
@@ -223,6 +227,13 @@ public class UIManager {
         }
     }
 
+    private void sortRecipesByLastAccess()
+    {
+        recipes.sort(Comparator.comparing(Recipe::getLastAccessTime));
+        Collections.reverse(recipes);
+        scenes.get(0).updateUI();
+    }
+
     protected void refreshGeneralUI()
     {
         root.setRight(createRightUI());
@@ -248,6 +259,7 @@ public class UIManager {
 
     public void show()
     {
+        sortRecipesByLastAccess();
         refreshGeneralUI();
         showScene(0);
 
