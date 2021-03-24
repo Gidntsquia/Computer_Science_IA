@@ -118,6 +118,7 @@ public class UIManager {
         Button cancelBtn = new Button("Cancel");
         cancelBtn.setOnAction(event -> {
             sortRecipesByLastAccess();
+            scenes.get(1).getRecipe().setCurrentlySurves(scenes.get(1).getRecipe().getDefaultServed());
             showScene(0);
         });
         Button quitBtn = new Button("Quit");
@@ -130,7 +131,7 @@ public class UIManager {
             }
         });
         homeNodes = new ArrayList<>(Arrays.asList(homeBtn, newRecipeBtn, newIngredientBtn, quitBtn));
-        overviewNodes = new ArrayList<>(Arrays.asList(homeBtn, newRecipeBtn, changeRecipeBtn, deleteBtn, saveBtn, cancelBtn));
+        overviewNodes = new ArrayList<>(Arrays.asList(homeBtn, newRecipeBtn, changeRecipeBtn, deleteBtn, cancelBtn));
         changeRecipeNodes = new ArrayList<>(Arrays.asList(homeBtn, deleteBtn, saveBtn, cancelBtn));
 
 

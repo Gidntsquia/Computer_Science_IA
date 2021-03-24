@@ -86,7 +86,13 @@ public class Ingredient implements Serializable {
         quantity = ingredientQuantity;
     }
 
-    public void setBooleans(Boolean... booleans) //boolean isVegetable, boolean isFruit, boolean isMeat, boolean isSavory, boolean isSweet, boolean isVegan, boolean isLactoseFree, boolean isGlutenFree)
+    public void setDefaultQuantity(double defaultQuantity)
+    {
+        this.defaultQuantity = defaultQuantity;
+        this.quantity = defaultQuantity;
+    }
+
+    public void setBooleans(Boolean... booleans)
     {
         for(int i = 0; i < allDescriptors.size(); i++)
         {

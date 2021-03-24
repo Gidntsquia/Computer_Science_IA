@@ -21,6 +21,7 @@ public class Recipe implements Serializable {
     //private ArrayList<Double> ingredientQuantities;
     private ArrayList<String> procedures;
     private int defaultServed;
+    private int currentlySurves;
     private Image image;
     private LocalDateTime lastAccessTime;
 
@@ -38,6 +39,7 @@ public class Recipe implements Serializable {
        ingredients = recipeIngredients;
        procedures = recipeProcedures;
        defaultServed = recipeDefaultServed;
+       currentlySurves = defaultServed;
        lastAccessTime = LocalDateTime.now();
     }
 
@@ -47,6 +49,7 @@ public class Recipe implements Serializable {
         ingredients = recipeIngredients;
         procedures = recipeProcedures;
         defaultServed = recipeDefaultServed;
+        currentlySurves = defaultServed;
         lastAccessTime = LocalDateTime.now();
         image = recipeImage;
     }
@@ -93,6 +96,10 @@ public class Recipe implements Serializable {
 
     public int getDefaultServed() {
         return defaultServed;
+    }
+
+    public int getCurrentlySurves() {
+        return currentlySurves;
     }
 
     public String getOverview()
@@ -210,6 +217,11 @@ public class Recipe implements Serializable {
 
     public void setDefaultServed(int defaultServed) {
         this.defaultServed = defaultServed;
+        this.currentlySurves = defaultServed;
+    }
+
+    public void setCurrentlySurves(int currentlySurves) {
+        this.currentlySurves = currentlySurves;
     }
 
     // TODO implement this

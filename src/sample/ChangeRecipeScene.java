@@ -37,6 +37,7 @@ public class ChangeRecipeScene extends Screen{
     // There will be a dropdown menu to add/remove ingredients
     public void openChangeRecipeUI()
     {
+
         // This scene has a unique top UI.
         if(currentRecipe.getName().equals(""))
         {
@@ -51,11 +52,13 @@ public class ChangeRecipeScene extends Screen{
             recipeNameField = new TextField(currentRecipe.getName());
             changeRecipeTopNodes = new ArrayList<>(Arrays.asList(nameLabel, recipeNameField));
             refreshGeneralUI();
-        }
 
+        }
         Label overviewLabel = new Label("Overview\n" + currentRecipe.getOverview());
         overviewLabel.setWrapText(true);
         overviewLabel.setMaxWidth(450);
+
+
 
         // ChangeRecipeUI = overall UI
         // leftUI = all left UI
@@ -98,7 +101,11 @@ public class ChangeRecipeScene extends Screen{
 
         changeRecipeUI.setLeft(leftUI);
         changeRecipeUI.setRight(rightUI);
-        changeRecipeUI.setTop(overviewLabel);
+        if(!currentRecipe.getName().equals(""))
+        {
+            changeRecipeUI.setTop(overviewLabel);
+        }
+
 
 
         setUI(changeRecipeUI);
@@ -196,7 +203,7 @@ public class ChangeRecipeScene extends Screen{
         // Ingredients
         for(int i = 0; i < ingredientQuantityFields.size(); i++)
         {
-            ingredients.get(i).setQuantity(Double.valueOf(ingredientQuantityFields.get(i).getText()));
+            ingredients.get(i).setDefaultQuantity(Double.valueOf(ingredientQuantityFields.get(i).getText()));
         }
 
         currentRecipe.setProcedures(getStringsFromTextFields(procedureFields));

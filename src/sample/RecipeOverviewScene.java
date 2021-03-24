@@ -50,7 +50,20 @@ public class RecipeOverviewScene extends Screen{
 
         mainUI.getChildren().addAll(new Label("\n"), bold(new Label("Ingredients")), ingredientList, new Label("\n\n"), bold(new Label("Procedures")), procedureList);
         mainUI.setSpacing(0);
-        TextField defaultServedField = new TextField(String.valueOf(recipe.getDefaultServed()));
+        TextField defaultServedField = new TextField(String.valueOf(recipe.getCurrentlySurves()));
+        defaultServedField.setOnAction(event -> {
+            for(int i = 0; i < currentRecipe.getIngredients().size(); i++)
+            {
+                // New amount is the default amount times the ratio of the normal people served to the new people served.
+                currentRecipe.getIngredients().get(i).multiplyQuantity(Double.parseDouble(defaultServedField.getText()) / currentRecipe.getIngredients().get(i).getDefaultQuantity());
+
+            }
+            recipe.setCurrentlySurves(Integer.parseInt(defaultServedField.getText()));
+            openRecipe(currentRecipe);
+
+
+        });
+
         defaultServedUI.getChildren().addAll(new Label("Serves:"), defaultServedField);
 
         overviewUI.setTop(summaryUI);
