@@ -9,6 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import javax.xml.soap.Text;
 import java.io.*;
 import java.util.*;
 import java.time.*;
@@ -16,6 +17,7 @@ import java.time.*;
 
 public class UIManager {
     public static Stage stage;
+    public static ArrayList<CheckBox> recipeIngredientDesciptors = new ArrayList<>();
     protected static ArrayList<Recipe> recipes = new ArrayList<>();
     protected static ArrayList<Screen> scenes = new ArrayList<>();
     private ArrayList<Node> homeNodes;
@@ -27,6 +29,7 @@ public class UIManager {
     protected static BorderPane root;
     protected static boolean creatingNewRecipe = false;
     protected static boolean creatingNewIngredient = false;
+
 
 
 
@@ -118,7 +121,7 @@ public class UIManager {
         Button cancelBtn = new Button("Cancel");
         cancelBtn.setOnAction(event -> {
             sortRecipesByLastAccess();
-            scenes.get(1).getRecipe().setCurrentlySurves(scenes.get(1).getRecipe().getDefaultServed());
+            scenes.get(1).getRecipe().resetCurrentlyServes();
             showScene(0);
         });
         Button quitBtn = new Button("Quit");
@@ -146,7 +149,10 @@ public class UIManager {
         Button searchBtn = new Button("Search");
         searchBtn.setOnAction(event -> {
             showScene(0);
+            System.out.println("Text: (" + ")");
             searchRecipes(searchBar);
+
+
         });
 
         normalTopNodes = new ArrayList<>(Arrays.asList(recipesLabel, searchBar, searchBtn));
@@ -213,31 +219,58 @@ public class UIManager {
         }
         rightUI.getChildren().add(ingredientList);
 
+        for(int i = 0; i < Ingredient.allDescriptors.size(); i++)
+        {
+            HBox checkBoxLine = new HBox();
+            CheckBox checkBox = new CheckBox();
+            checkBoxLine.getChildren().addAll(checkBox, new Label(Ingredient.allDescriptors.get(i)));
+            recipeIngredientDesciptors.add(checkBox);
+
+            rightUI.getChildren().add(checkBoxLine);
+        }
+
+
+
+
         return rightUI;
     }
 
     private void searchRecipes(TextField searchBar)
     {
+        if(searchBar.getText().isEmpty())
+        {
+            sortRecipesByLastAccess();
 
-        recipes.sort((o1, o2)
-                -> o1.compareTo(o2, searchBar.getText()));
+        }
+        else
+        {
+            sortRecipesByRelevance(searchBar);
+        }
         scenes.get(0).updateUI();
         if(currentSceneIndex != 0)
         {
             showScene(0);
         }
+
     }
+
+    private void sortRecipesByRelevance(TextField searchBar)
+    {
+        recipes.sort((o1, o2)
+                -> o1.compareTo(o2, searchBar.getText()));
+    }
+
 
     private void sortRecipesByLastAccess()
     {
         recipes.sort(Comparator.comparing(Recipe::getLastAccessTime));
         Collections.reverse(recipes);
-        scenes.get(0).updateUI();
+
     }
 
     protected void refreshGeneralUI()
     {
-        root.setRight(createRightUI());
+
         if(currentSceneIndex == 0)
         {
             root.setTop(createTopUI(normalTopNodes));
@@ -245,12 +278,14 @@ public class UIManager {
         }
         else if(currentSceneIndex == 1)
         {
+            root.setRight(createRightUI());
             root.setTop(createTopUI(normalTopNodes));
             root.setLeft(createLeftUI(overviewNodes));
         }
         else
         {
             // This is for both Change Recipe and Change Ingredient
+            root.setRight(createRightUI());
             root.setTop(createTopUI(changeRecipeTopNodes));
             root.setLeft(createLeftUI(changeRecipeNodes));
         }
@@ -385,7 +420,7 @@ public class UIManager {
         }
         else
         {
-            System.out.println("Already on scene " + sceneIndex);
+            //System.out.println("Already on scene " + sceneIndex);
         }
     }
 

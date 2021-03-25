@@ -54,9 +54,9 @@ public class RecipeOverviewScene extends Screen{
         defaultServedField.setOnAction(event -> {
             for(int i = 0; i < currentRecipe.getIngredients().size(); i++)
             {
+                Ingredient tempIngredient =  currentRecipe.getIngredients().get(i);
                 // New amount is the default amount times the ratio of the normal people served to the new people served.
-                currentRecipe.getIngredients().get(i).multiplyQuantity(Double.parseDouble(defaultServedField.getText()) / currentRecipe.getIngredients().get(i).getDefaultQuantity());
-
+                tempIngredient.multiplyQuantity(Double.parseDouble(defaultServedField.getText()) / recipe.getDefaultServed());
             }
             recipe.setCurrentlySurves(Integer.parseInt(defaultServedField.getText()));
             openRecipe(currentRecipe);

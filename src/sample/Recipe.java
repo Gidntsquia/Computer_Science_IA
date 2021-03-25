@@ -2,6 +2,7 @@ package sample;
 
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
@@ -177,7 +178,7 @@ public class Recipe implements Serializable {
 
         Button viewRecipeBtn = new Button(this.toString());
         // TODO this should increase in size as the window increases in size.
-        viewRecipeBtn.setPrefSize(200, 100);
+        viewRecipeBtn.setPrefSize(400, 150);
 
         viewRecipeBtn.setOnAction(viewEvent);
 
@@ -224,6 +225,15 @@ public class Recipe implements Serializable {
         this.currentlySurves = currentlySurves;
     }
 
+    public void resetCurrentlyServes()
+    {
+        this.currentlySurves = defaultServed;
+        for(int i = 0; i < this.getIngredients().size(); i++)
+        {
+            this.getIngredients().get(i).resetQuantity();
+        }
+    }
+
     // TODO implement this
     public void setImage(Image image) {
         this.image = image;
@@ -239,15 +249,47 @@ public class Recipe implements Serializable {
         int ingredientsCloseness1 = 0;
         for(Ingredient ingredient : this.getIngredients())
         {
+            /*
+            int sumBooleans = 0;
+            for(int i = 0; i < UIManager.recipeIngredientDesciptors.size(); i++)
+            {
+                sumBooleans += (UIManager.recipeIngredientDesciptors.get(i).isSelected() == ingredient.getDescriptors().get(Ingredient.allDescriptors.get(i))) ? 1 : 0;
+            }
+
+            if(sumBooleans == UIManager.recipeIngredientDesciptors.size())
+            {
+                // Extra score for exact match
+                ingredientsCloseness1 += 10;
+                System.out.println("Exact match");
+            }
+             */
             ingredientsCloseness1 += fuzzySearch.fuzzyScore(ingredient.getName(), searchText);
+
+
+
         }
         int ingredientsCloseness2 = 0;
         for(Ingredient ingredient : other.getIngredients())
         {
+            /*
+            int sumBooleans = 0;
+            for(int i = 0; i < UIManager.recipeIngredientDesciptors.size(); i++)
+            {
+                sumBooleans += (UIManager.recipeIngredientDesciptors.get(i).isSelected() == ingredient.getDescriptors().get(Ingredient.allDescriptors.get(i))) ? 1 : 0;
+            }
+            if(sumBooleans == UIManager.recipeIngredientDesciptors.size())
+            {
+                // Extra score for exact match
+                ingredientsCloseness2 += 10;
+                System.out.println("Exact match");
+            }
+
+             */
             ingredientsCloseness2 += fuzzySearch.fuzzyScore(ingredient.getName(), searchText);
+
         }
 
-        return (fuzzySearch.fuzzyScore(other.getName(), searchText) + ingredientsCloseness2)  - (fuzzySearch.fuzzyScore(this.getName(), searchText) + ingredientsCloseness1);
+        return (fuzzySearch.fuzzyScore(other.getName(), searchText)  + ingredientsCloseness2)  - (fuzzySearch.fuzzyScore(this.getName(), searchText) + ingredientsCloseness1);
 
         // return (int) StringUtils.getLevenshteinDistance(other.getName(), searchText) - (int) StringUtils.getLevenshteinDistance(this.getName(), searchText);
         //return (int) searchText.compareToIgnoreCase(this.getName()) - (int) searchText.compareToIgnoreCase(other.getName());

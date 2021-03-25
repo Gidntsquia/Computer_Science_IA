@@ -71,12 +71,11 @@ public class Main extends Application {
         basicMethods.add(method2);
         basicMethods.add(method3);
 
+        /*
         LocalDateTime time = LocalDateTime.now();
         TimeUnit.SECONDS.sleep(1);
-        System.out.println("Hello");
         LocalDateTime time2 = LocalDateTime.now();
-        System.out.println(time2.compareTo(time));
-
+        */
         //UI.addRecipe(new Recipe("Recipe 1", new ArrayList<>(basicIngredients), new ArrayList<>(basicMethods), 10, 0));
         //UI.addRecipe(new Recipe("Recipe 2", new ArrayList<>(basicIngredients), new ArrayList<>(basicMethods), 1, 5));
         //UI.addRecipe(new Recipe("Yo", new ArrayList<>(basicIngredients), new ArrayList<>(basicMethods), 100, 27));

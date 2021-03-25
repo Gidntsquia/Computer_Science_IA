@@ -36,33 +36,6 @@ public class ChangeIngredientScene extends Screen{
 
         flavorField = new TextField();
         unitsField = new TextField();
-        /*
-        isVegetableBox = new CheckBox();
-        isFruitBox = new CheckBox();
-        isMeatBox = new CheckBox();
-        isSavoryBox = new CheckBox();
-        isSweetBox = new CheckBox();
-        isVeganBox = new CheckBox();
-        isLactoseFreeBox = new CheckBox();
-        isGlutenFreeBox = new CheckBox();
-
-
-
-         */
-/*
-        checkBoxes.put("Vegetable?", isVegetableBox);
-        checkBoxes.put("Fruit?", isFruitBox);
-        checkBoxes.put("Meat?", isMeatBox);
-        checkBoxes.put("Savory?", isSavoryBox);
-        checkBoxes.put("Sweet?", isSweetBox);
-        checkBoxes.put("Vegan", isVeganBox);
-        checkBoxes.put("Lactose Free?", isLactoseFreeBox);
-        checkBoxes.put("Gluten Free?", isGlutenFreeBox);
-
-
-
- */
-
     }
 
 
@@ -99,13 +72,11 @@ public class ChangeIngredientScene extends Screen{
 
         checkBoxes = new HashMap<>();
         String key;
-        System.out.println(Ingredient.allDescriptors.size());
         for(int i = 0; i < Ingredient.allDescriptors.size(); i++)
         {
 
             key = Ingredient.allDescriptors.get(i);
             CheckBox newDescriptor = new CheckBox();
-            System.out.println(i + ": " + key);
             newDescriptor.setSelected(currentIngredient.getDescriptors().get(key));
             checkBoxes.put(key + "?", newDescriptor);
         }
