@@ -1,18 +1,23 @@
 package sample;
 
+import com.aquafx_project.AquaFx;
+import com.guigarage.responsive.ResponsiveHandler;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.aerofx.AeroFX;
 
 import javax.xml.soap.Text;
 import java.io.*;
 import java.util.*;
 import java.time.*;
+
 
 
 public class UIManager {
@@ -218,7 +223,7 @@ public class UIManager {
 
         }
         rightUI.getChildren().add(ingredientList);
-
+        /*
         for(int i = 0; i < Ingredient.allDescriptors.size(); i++)
         {
             HBox checkBoxLine = new HBox();
@@ -228,7 +233,7 @@ public class UIManager {
 
             rightUI.getChildren().add(checkBoxLine);
         }
-
+        */
 
 
 
@@ -299,8 +304,14 @@ public class UIManager {
         refreshGeneralUI();
         showScene(0);
 
+        Scene myScene = new Scene(root, 800, 800);
+
+
+        //ResponsiveHandler.addResponsiveToWindow(stage);
+        //String style = getClass().getResource("myStyle.css").toExternalForm();
+        //myScene.getStylesheets().add();
         stage.setTitle("IA " + scenes.get(currentSceneIndex).getName() + " Screen");
-        stage.setScene(new javafx.scene.Scene(root, 800, 800));
+        stage.setScene(myScene);
         stage.show();
     }
 
