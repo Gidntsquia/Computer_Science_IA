@@ -92,7 +92,9 @@ public class UIManager {
             {
                 deleteRecipe(scenes.get(currentSceneIndex).getRecipe());
             }
+
             showScene(0);
+            refreshGeneralUI();
         });
 
         Button saveBtn = new Button("Save");
@@ -275,22 +277,21 @@ public class UIManager {
 
     protected void refreshGeneralUI()
     {
-
+        root.setRight(createRightUI());
         if(currentSceneIndex == 0)
         {
+
             root.setTop(createTopUI(normalTopNodes));
             root.setLeft(createLeftUI(homeNodes));
         }
         else if(currentSceneIndex == 1)
         {
-            root.setRight(createRightUI());
             root.setTop(createTopUI(normalTopNodes));
             root.setLeft(createLeftUI(overviewNodes));
         }
         else
         {
             // This is for both Change Recipe and Change Ingredient
-            root.setRight(createRightUI());
             root.setTop(createTopUI(changeRecipeTopNodes));
             root.setLeft(createLeftUI(changeRecipeNodes));
         }

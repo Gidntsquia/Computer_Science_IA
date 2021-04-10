@@ -82,7 +82,7 @@ public class Main extends Application {
 
         UI.show();
 
-
+        //TODO clean up comments, make ingredients all change
 
 
 

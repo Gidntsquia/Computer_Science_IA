@@ -67,7 +67,7 @@ public class ChangeIngredientScene extends Screen{
         flavorField.setText(currentIngredient.getFlavor());
         unitsField.setText(currentIngredient.getUnits());
 
-        leftUI.getChildren().add(getUILine("Flavor:", flavorField));
+        //leftUI.getChildren().add(getUILine("Flavor:", flavorField));
         leftUI.getChildren().add(getUILine("Units:", unitsField));
 
         checkBoxes = new HashMap<>();
@@ -83,7 +83,7 @@ public class ChangeIngredientScene extends Screen{
         for(String lineKey : checkBoxes.keySet())
         {
 
-            leftUI.getChildren().add(getUILine(lineKey, checkBoxes.get(lineKey)));
+            //leftUI.getChildren().add(getUILine(lineKey, checkBoxes.get(lineKey)));
 
 
         }

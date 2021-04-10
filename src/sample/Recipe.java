@@ -71,7 +71,7 @@ public class Recipe implements Serializable {
             for(int i = 0; i < ingredients.size(); i++)
             {
                 // Numbered list [1. , 2., 3. ...] with a plural version of the ingredient name.
-                list += (i + 1) + ". " + ingredients.get(i) + "s\n";
+                list += (i + 1) + ". " + ingredients.get(i) + "\n";
             }
         }
 
@@ -112,12 +112,12 @@ public class Recipe implements Serializable {
             // Hard coded functionality for if there are only 1 or 2 ingredients.
             if(ingredients.size() == 1)
             {
-                summaryText += ingredients.get(0).getName().toLowerCase() + "s, ";
+                summaryText += ingredients.get(0).getName().toLowerCase() + ", ";
             }
             else if(ingredients.size() == 2)
             {
-                summaryText += ingredients.get(0).getName().toLowerCase() + "s ";
-                summaryText += "and " + ingredients.get(1).getName().toLowerCase() + "s, ";
+                summaryText += ingredients.get(0).getName().toLowerCase() + " ";
+                summaryText += "and " + ingredients.get(1).getName().toLowerCase() + ", ";
             }
             else
             {
@@ -125,11 +125,11 @@ public class Recipe implements Serializable {
                 {
                     if(i == ingredients.size() - 1)
                     {
-                        summaryText += "and " + ingredients.get(i).getName().toLowerCase() + "s, ";
+                        summaryText += "and " + ingredients.get(i).getName().toLowerCase() + ", ";
                     }
                     else
                     {
-                        summaryText += ingredients.get(i).getName().toLowerCase() + "s, ";
+                        summaryText += ingredients.get(i).getName().toLowerCase() + ", ";
                     }
 
 

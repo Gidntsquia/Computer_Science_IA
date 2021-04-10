@@ -24,7 +24,7 @@ public class Ingredient implements Serializable {
         name = ingredientName;
         defaultQuantity = 0;
         quantity = defaultQuantity;
-        units = "cups";
+        units = "";
         initializeBooleans();
 
 
