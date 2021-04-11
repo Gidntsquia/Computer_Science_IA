@@ -119,7 +119,10 @@ public class ChangeRecipeScene extends Screen{
         {
             for(TextField field : fields)
             {
-                strings.add(field.getText());
+                if(!field.getText().equals(""))
+                {
+                    strings.add(field.getText());
+                }
             }
         }
         return strings;
@@ -183,18 +186,24 @@ public class ChangeRecipeScene extends Screen{
     }
 
     @Override
-    public void updateUI()
-    {
-
-    }
-
-    @Override
     public void runBirthMethods()
     {
         refreshGeneralUI();
         openChangeRecipeUI();
     }
 
+    @Override
+    public String getTitle()
+    {
+        if(UIManager.creatingNewRecipe)
+        {
+            return "Creating New Recipe";
+        }
+        else
+        {
+            return this.getName() + " Screen. Changing: " + currentRecipe.getName();
+        }
+    }
     @Override
     public void saveInfo()
     {
@@ -211,6 +220,7 @@ public class ChangeRecipeScene extends Screen{
 
         // Sets most recent access time to right now.
         currentRecipe.updateLastAccessToNow();
+        saveRecipes();
     }
 
     @Override

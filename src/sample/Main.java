@@ -5,15 +5,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.Writer;
-import java.lang.reflect.Array;
-import java.sql.Time;
-import java.util.*;
-
-import static sample.UIManager.recipes;
-import java.time.*;
-import java.util.concurrent.TimeUnit;
 
 public class Main extends Application {
 
@@ -51,54 +42,8 @@ public class Main extends Application {
         UI.addScene(changeRecipeScene);
         UI.addScene(changeIngredientScene);
 
-        Ingredient potato = new Ingredient("Potato", 5, "cups", "starchy");
-        Ingredient tomato = new Ingredient("Tomato", 2, "cups", "acidic");
-        /*
-        Ingredient.addIngredientToList(potato);
-        Ingredient.addIngredientToList(tomato);
-         */
-        ArrayList<Ingredient> basicIngredients = new ArrayList<>();
-        basicIngredients.add(potato);
-        basicIngredients.add(tomato);
-
-
-
-        String method1 = "Skin the potato";
-        String method2 = "Wash the tomato";
-        String method3 = "Put it all together";
-        ArrayList<String> basicMethods = new ArrayList<>();
-        basicMethods.add(method1);
-        basicMethods.add(method2);
-        basicMethods.add(method3);
-
-        /*
-        LocalDateTime time = LocalDateTime.now();
-        TimeUnit.SECONDS.sleep(1);
-        LocalDateTime time2 = LocalDateTime.now();
-        */
-        //UI.addRecipe(new Recipe("Recipe 1", new ArrayList<>(basicIngredients), new ArrayList<>(basicMethods), 10, 0));
-        //UI.addRecipe(new Recipe("Recipe 2", new ArrayList<>(basicIngredients), new ArrayList<>(basicMethods), 1, 5));
-        //UI.addRecipe(new Recipe("Yo", new ArrayList<>(basicIngredients), new ArrayList<>(basicMethods), 100, 27));
 
         UI.show();
-
-        //TODO clean up comments, make ingredients all change
-
-
-
-
-
-
-
-
-
-        /*
-        Ingredient potato = new Ingredient("Potato", 5, "cups", "starchy");
-        Ingredient tomato = new Ingredient("Tomato", 2, "cups", "acidic");
-
-        System.out.println(potato);
-        */
-
     }
 
     public static void main(String[] args) {

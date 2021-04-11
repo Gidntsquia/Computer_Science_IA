@@ -5,21 +5,14 @@ import javafx.scene.layout.VBox;
 
 
 public class HomeScene extends Screen{
-
     private BorderPane homeScene;
 
     public HomeScene(String screenName) {
         super(screenName);
         homeScene = new BorderPane();
-
-        // TODO add download recipes from file feature here
-        recipes.clear();
-
-        // Accesses screenpane from Screen class
         showRecipes();
-
+        // Sets UI for this scene with a method from Screen super class.
         setUI(homeScene);
-
     }
 
     @Override
@@ -28,13 +21,9 @@ public class HomeScene extends Screen{
         showRecipes();
         refreshGeneralUI();
     }
-    // Save recipe, download recipes
-    // Get list of recipes +  recipe maker, make it where you can save recipes
 
-    // This code will: Use a for loop to iterate through the recipes Array List.
-    // It will add each Recipe.toString to a String. A label will be initialized
-    // with this String and added to the center of the homescene. Then, we update
-    // the screenpane to be exactly like the homescene.
+    // Displays recipes in recipes ArrayList in order. Also
+    // adds access and delete functionality.
     public void showRecipes()
     {
         VBox recipeList = new VBox();
@@ -47,10 +36,4 @@ public class HomeScene extends Screen{
         }
         homeScene.setCenter(recipeList);
     }
-
-
-
-
-
-
 }

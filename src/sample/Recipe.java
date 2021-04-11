@@ -19,7 +19,6 @@ import java.util.Locale;
 public class Recipe implements Serializable {
     private String name;
     private ArrayList<Ingredient> ingredients;
-    //private ArrayList<Double> ingredientQuantities;
     private ArrayList<String> procedures;
     private int defaultServed;
     private int currentlySurves;
@@ -131,8 +130,6 @@ public class Recipe implements Serializable {
                     {
                         summaryText += ingredients.get(i).getName().toLowerCase() + ", ";
                     }
-
-
                 }
             }
         }
@@ -140,8 +137,13 @@ public class Recipe implements Serializable {
         if(procedures != null)
         {
             // Iterates through all procedures, adding each procedure's name to the string representation of procedures.
-            // Hard coded functionality for if there are only 1 or 2 procedures.
-            if(procedures.size() == 1)
+            // Hard coded functionality for grammar if there are only 0, 1, or 2 procedures.
+            if(procedures.size() == 0)
+            {
+                summaryText = summaryText.replace("Using ", "Made with ");
+                summaryText = summaryText.substring(0, summaryText.length() - 2) + ".";
+            }
+            else if(procedures.size() == 1)
             {
                 summaryText += procedures.get(0).toLowerCase() + ". ";
             }
@@ -239,60 +241,71 @@ public class Recipe implements Serializable {
         this.image = image;
     }
 
+    // Used to sort the recipes ArrayList. Gauges how much closer one recipe is than another to
+    // searchText. Recipes closer to the search text get lower FuzzyScores. Recipe names are
+    // given a higher weight than ingredients to give more intuitive results.
     public int compareTo(Recipe other, String searchText)
     {
+        // Recipes without a name are put at the bottom of the sort since List is reversed later.
         if(this.getName() == null || this.getName().equals(""))
         {
             return 100000;
         }
-        FuzzyScore fuzzySearch = new FuzzyScore(Locale.US);
-        int ingredientsCloseness1 = 0;
-        for(Ingredient ingredient : this.getIngredients())
+        else if(other.getName() == null || other.getName().equals(""))
         {
-            /*
-            int sumBooleans = 0;
-            for(int i = 0; i < UIManager.recipeIngredientDesciptors.size(); i++)
+            return -100000;
+        }
+        FuzzyScore fuzzySearch = new FuzzyScore(Locale.US);
+        // Search terms checked against each ingredient, and overall closeness divided by total number
+        // of ingredients to get average closeness. Very close matches are given particular weight.
+        int closeness;
+        int ingredientsCloseness1 = 0;
+        if(this.getIngredients().size() == 0)
+        {
+            // This ensures no division by 0.
+            ingredientsCloseness1 = 50;
+        }
+        else
+        {
+            for(Ingredient ingredient : this.getIngredients())
             {
-                sumBooleans += (UIManager.recipeIngredientDesciptors.get(i).isSelected() == ingredient.getDescriptors().get(Ingredient.allDescriptors.get(i))) ? 1 : 0;
+                closeness = fuzzySearch.fuzzyScore(ingredient.getName(), searchText);
+                if(closeness > 8)
+                {
+                    ingredientsCloseness1 += closeness;
+                }
+                else
+                {
+                    ingredientsCloseness1 -= 10;
+                }
             }
-
-            if(sumBooleans == UIManager.recipeIngredientDesciptors.size())
-            {
-                // Extra score for exact match
-                ingredientsCloseness1 += 10;
-                System.out.println("Exact match");
-            }
-             */
-            ingredientsCloseness1 += fuzzySearch.fuzzyScore(ingredient.getName(), searchText);
-
-
-
+            ingredientsCloseness1 /= this.getIngredients().size();
         }
         int ingredientsCloseness2 = 0;
-        for(Ingredient ingredient : other.getIngredients())
+        if(other.getIngredients().size() == 0)
         {
-            /*
-            int sumBooleans = 0;
-            for(int i = 0; i < UIManager.recipeIngredientDesciptors.size(); i++)
+            // This ensures no division by 0.
+            ingredientsCloseness2 = 50;
+        }
+        else
+        {
+            for(Ingredient ingredient : other.getIngredients())
             {
-                sumBooleans += (UIManager.recipeIngredientDesciptors.get(i).isSelected() == ingredient.getDescriptors().get(Ingredient.allDescriptors.get(i))) ? 1 : 0;
+                closeness = fuzzySearch.fuzzyScore(ingredient.getName(), searchText);
+                if(closeness > 8)
+                {
+                    ingredientsCloseness2 += closeness;
+                }
+                else
+                {
+                    ingredientsCloseness2 -= 10;
+                }
             }
-            if(sumBooleans == UIManager.recipeIngredientDesciptors.size())
-            {
-                // Extra score for exact match
-                ingredientsCloseness2 += 10;
-                System.out.println("Exact match");
-            }
-
-             */
-            ingredientsCloseness2 += fuzzySearch.fuzzyScore(ingredient.getName(), searchText);
-
+            ingredientsCloseness2 /= other.getIngredients().size();
         }
 
-        return (fuzzySearch.fuzzyScore(other.getName(), searchText)  + ingredientsCloseness2)  - (fuzzySearch.fuzzyScore(this.getName(), searchText) + ingredientsCloseness1);
-
-        // return (int) StringUtils.getLevenshteinDistance(other.getName(), searchText) - (int) StringUtils.getLevenshteinDistance(this.getName(), searchText);
-        //return (int) searchText.compareToIgnoreCase(this.getName()) - (int) searchText.compareToIgnoreCase(other.getName());
+        return (int)(fuzzySearch.fuzzyScore(other.getName(), searchText) * 2  + ingredientsCloseness2)
+                - (int)(fuzzySearch.fuzzyScore(this.getName(), searchText) * 2 + ingredientsCloseness1);
     }
 
     public void updateLastAccessToNow()
@@ -315,20 +328,4 @@ public class Recipe implements Serializable {
 
     }
 
-    /*
-    public String toString()
-    {
-        String recipeOverview = "";
-        recipeOverview += name + "\n";
-        recipeOverview += "Ingredients: \n";
-        if(this.ingredients != null)
-        {
-            recipeOverview += getIngredientList();
-        }
-
-        return recipeOverview;
-
-    }
-
-     */
 }

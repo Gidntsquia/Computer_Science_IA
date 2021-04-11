@@ -31,11 +31,10 @@ public class Ingredient implements Serializable {
 
     }
 
-    public Ingredient(String ingredientName, String units, String flavor)
+    public Ingredient(String ingredientName, String units)
     {
         this.name = ingredientName;
         this.units = units;
-        this.flavor = flavor;
         initializeBooleans();
     }
 

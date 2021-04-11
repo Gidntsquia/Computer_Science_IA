@@ -11,9 +11,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.aerofx.AeroFX;
-
-import javax.xml.soap.Text;
 import java.io.*;
 import java.util.*;
 import java.time.*;
@@ -113,6 +110,7 @@ public class UIManager {
                 saveRecipes();
                 showScene(0);
             } else if (getCurrentSceneIndex() == 3) {
+                // Save ingredient currently being changed if on change ingredient screen.
                 scenes.get(3).saveInfo();
                 saveRecipes();
                 showScene(0);
@@ -134,6 +132,7 @@ public class UIManager {
         Button quitBtn = new Button("Quit");
         quitBtn.setOnAction(event -> {
             if (currentSceneIndex == 0) {
+                saveRecipes();
                 Platform.exit();
             } else {
                 sortRecipesByLastAccess();
@@ -158,8 +157,6 @@ public class UIManager {
             showScene(0);
             System.out.println("Text: (" + ")");
             searchRecipes(searchBar);
-
-
         });
 
         normalTopNodes = new ArrayList<>(Arrays.asList(recipesLabel, searchBar, searchBtn));
@@ -202,6 +199,7 @@ public class UIManager {
         return leftUI;
     }
 
+    // Creates Ingredient menu on right side of UI.
     public VBox createRightUI()
     {
         VBox rightUI = new VBox();
@@ -209,8 +207,8 @@ public class UIManager {
         ArrayList<MenuItem> ingredientMenuItems = new ArrayList<>();
         for(int i = 0; i < Ingredient.allIngredients.size(); i++)
         {
-
             ingredientMenuItems.add(new MenuItem(Ingredient.allIngredients.get(i).getName()));
+            // finalI workaround used here to ensure each ingredient menu calls on correct index.
             int finalI = i;
             ingredientMenuItems.get(i).setOnAction(event -> {
                 creatingNewIngredient = false;
@@ -222,26 +220,14 @@ public class UIManager {
         for(MenuItem ingredient : ingredientMenuItems)
         {
             ingredientList.getItems().add(ingredient);
-
         }
         rightUI.getChildren().add(ingredientList);
-        /*
-        for(int i = 0; i < Ingredient.allDescriptors.size(); i++)
-        {
-            HBox checkBoxLine = new HBox();
-            CheckBox checkBox = new CheckBox();
-            checkBoxLine.getChildren().addAll(checkBox, new Label(Ingredient.allDescriptors.get(i)));
-            recipeIngredientDesciptors.add(checkBox);
-
-            rightUI.getChildren().add(checkBoxLine);
-        }
-        */
-
-
-
         return rightUI;
     }
 
+    // Sorts recipes in order of relevance to search terms
+    // and brings up home screen. If search terms are empty,
+    // then the recipes are sorted based on last access time.
     private void searchRecipes(TextField searchBar)
     {
         if(searchBar.getText().isEmpty())
@@ -258,21 +244,23 @@ public class UIManager {
         {
             showScene(0);
         }
-
     }
 
+    // Sorts recipes based on closeness to search terms.
+    // Closer recipes will be displayed higher in home screen.
     private void sortRecipesByRelevance(TextField searchBar)
     {
         recipes.sort((o1, o2)
                 -> o1.compareTo(o2, searchBar.getText()));
     }
 
-
+    // Sorts recipes based on last time user interacted with the recipe.
+    // The Collection is reversed to get descending order with most
+    // recent time of access at top. Uses LocalDateTime.
     private void sortRecipesByLastAccess()
     {
         recipes.sort(Comparator.comparing(Recipe::getLastAccessTime));
         Collections.reverse(recipes);
-
     }
 
     protected void refreshGeneralUI()
@@ -304,27 +292,22 @@ public class UIManager {
         sortRecipesByLastAccess();
         refreshGeneralUI();
         showScene(0);
-
         Scene myScene = new Scene(root, 800, 800);
 
-
-        //ResponsiveHandler.addResponsiveToWindow(stage);
-        //String style = getClass().getResource("myStyle.css").toExternalForm();
-        //myScene.getStylesheets().add();
-        stage.setTitle("IA " + scenes.get(currentSceneIndex).getName() + " Screen");
         stage.setScene(myScene);
         stage.show();
     }
 
 
+    // Adds a recipe to the recipes ArrayList. Updates home UI accordingly.
     public void addRecipe(Recipe recipeToBeAdded)
     {
         recipes.add(recipeToBeAdded);
         saveRecipes();
         scenes.get(0).updateUI();
-
     }
 
+    // Deletes a recipe at a given index from the recipes ArrayList. Updates home UI accordingly.
     public void deleteRecipe(int deleteIndex)
     {
         recipes.remove(deleteIndex);
@@ -332,9 +315,10 @@ public class UIManager {
         scenes.get(0).updateUI();
     }
 
-    public void deleteRecipe(Object objectForRemoval)
+    // Deletes a given recipe from the recipes ArrayList. Updates home UI accordingly.
+    public void deleteRecipe(Recipe recipeForRemoval)
     {
-        recipes.remove(objectForRemoval);
+        recipes.remove(recipeForRemoval);
         saveRecipes();
         scenes.get(0).updateUI();
     }
@@ -347,7 +331,7 @@ public class UIManager {
         }catch(Exception myException){System.out.println(myException);}
     }
 
-    private void saveRecipes()
+    protected void saveRecipes()
     {
         try{
             Writer w1 = new FileWriter("recipes.txt", false);
@@ -355,36 +339,35 @@ public class UIManager {
             writeRecipes(recipes);
             writeIngredients(Ingredient.allIngredients);
 
-
         }catch(Exception myException) {System.out.println(myException);}
 
     }
 
-    public static void writeRecipes(List<Recipe> recipes) throws IOException {
+    public static void writeRecipes(ArrayList<Recipe> recipes) throws IOException {
         try (FileOutputStream os = new FileOutputStream("recipes.txt");
              ObjectOutputStream oos = new ObjectOutputStream(os)) {
             oos.writeObject(recipes);
         }
     }
 
-    public static List<Recipe> readFileRecipes() throws IOException, ClassNotFoundException {
+    public static ArrayList<Recipe> readFileRecipes() throws IOException, ClassNotFoundException {
         try (FileInputStream is = new FileInputStream("recipes.txt");
              ObjectInputStream ois = new ObjectInputStream(is)) {
-            return (List<Recipe>) ois.readObject();
+            return (ArrayList<Recipe>) ois.readObject();
         }
     }
 
-    public static void writeIngredients(List<Ingredient> ingredients) throws IOException {
+    public static void writeIngredients(ArrayList<Ingredient> ingredients) throws IOException {
         try (FileOutputStream os = new FileOutputStream("ingredients.txt");
              ObjectOutputStream oos = new ObjectOutputStream(os)) {
             oos.writeObject(ingredients);
         }
     }
 
-    public static List<Ingredient> readFileIngredients() throws IOException, ClassNotFoundException {
+    public static ArrayList<Ingredient> readFileIngredients() throws IOException, ClassNotFoundException {
         try (FileInputStream is = new FileInputStream("ingredients.txt");
              ObjectInputStream ois = new ObjectInputStream(is)) {
-            return (List<Ingredient>) ois.readObject();
+            return (ArrayList<Ingredient>) ois.readObject();
         }
     }
 
@@ -432,7 +415,9 @@ public class UIManager {
         }
         else
         {
-            //System.out.println("Already on scene " + sceneIndex);
+            // Simply refresh UI if already on it.
+            refreshGeneralUI();
+            scenes.get(sceneIndex).updateUI();
         }
     }
 

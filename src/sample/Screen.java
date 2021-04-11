@@ -4,9 +4,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-// This is the base class for all scenes used in this project.
-// It has the basics for creating, modifying, and managing a scene.
-// It also includes anything that all the scenes have in common.
+// This is the base class for all scenes used in this project. It has the basics for
+// creating, modifying, and managing a scene. It also includes anything that all the scenes have in common.
 public class Screen extends UIManager{
     public static Stage stage;
     public ScrollPane screenPane;
@@ -30,16 +29,14 @@ public class Screen extends UIManager{
     public void setRecipe(Recipe recipe) { /*This command is empty because it is overriden by the child classes.*/ }
 
     public Recipe getRecipe()
-    {
-        /*This command is empty because it is overriden by the child classes.*/
+    {/*This command is empty because it is overriden by the child classes.*/
         return new Recipe("[Blank Recipe]");
     }
 
     public void setIngredient(Ingredient ingredient) { /*This command is empty because it is overriden by the child classes.*/ };
 
     public Ingredient getIngredient()
-    {
-        /*This command is empty because it is overriden by the child classes.*/
+    {/*This command is empty because it is overriden by the child classes.*/
         return new Ingredient("[Blank Ingredient]");
     }
 
@@ -57,7 +54,7 @@ public class Screen extends UIManager{
 
     public String getTitle()
     {
-        return "IA " + this.getName() + " Screen";
+        return this.getName() + " Screen";
     }
 
     public String toString()
