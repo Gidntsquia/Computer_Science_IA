@@ -155,7 +155,6 @@ public class UIManager {
         Button searchBtn = new Button("Search");
         searchBtn.setOnAction(event -> {
             showScene(0);
-            System.out.println("Text: (" + ")");
             searchRecipes(searchBar);
         });
 

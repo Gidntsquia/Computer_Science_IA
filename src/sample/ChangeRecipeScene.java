@@ -139,6 +139,7 @@ public class ChangeRecipeScene extends Screen{
             ingredientDropdown.getItems().get(i).setOnAction(event -> {
                 ingredients.set(lineIndex, Ingredient.copyIngredient(Ingredient.allIngredients.get(finalI)));
                 ingredientMenusUI.getChildren().set(lineIndex, getIngredientLine(lineIndex));
+                ingredientQuantityFields.remove(ingredientQuantityFields.size() - 1);
             });
         }
         return ingredientDropdown;
@@ -204,20 +205,22 @@ public class ChangeRecipeScene extends Screen{
             return this.getName() + " Screen. Changing: " + currentRecipe.getName();
         }
     }
+
     @Override
     public void saveInfo()
     {
         currentRecipe.setName(recipeNameField.getText());
-
-        // Ingredients
+        // Resets all ingredient quantities.
         for(int i = 0; i < ingredientQuantityFields.size(); i++)
         {
             ingredients.get(i).setDefaultQuantity(Double.valueOf(ingredientQuantityFields.get(i).getText()));
         }
-
         currentRecipe.setProcedures(getStringsFromTextFields(procedureFields));
-        currentRecipe.setDefaultServed(Integer.parseInt(defaultServedField.getText()));
-
+        // This ensures that the default served integer is not an overflow.
+        if(defaultServedField.getText().length() < 10)
+        {
+            currentRecipe.setDefaultServed(Integer.parseInt(defaultServedField.getText()));
+        }
         // Sets most recent access time to right now.
         currentRecipe.updateLastAccessToNow();
         saveRecipes();

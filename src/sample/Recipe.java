@@ -104,8 +104,12 @@ public class Recipe implements Serializable {
 
     public String getOverview()
     {
+        if(ingredients.size() == 0 && procedures.size() == 0)
+        {
+            return "No ingredients or procedures.";
+        }
         String summaryText = "Using ";
-        if(ingredients != null)
+        if(ingredients != null && ingredients.size() != 0)
         {
             // Iterates through all ingredients, adding each ingredient's name to the string representation of ingredients.
             // Hard coded functionality for if there are only 1 or 2 ingredients.
@@ -134,8 +138,12 @@ public class Recipe implements Serializable {
             }
         }
 
-        if(procedures != null)
+        if(procedures != null && procedures.size() != 0)
         {
+            if(ingredients.size() == 0)
+            {
+                summaryText = summaryText.replace("Using ", "To create this recipe, ");
+            }
             // Iterates through all procedures, adding each procedure's name to the string representation of procedures.
             // Hard coded functionality for grammar if there are only 0, 1, or 2 procedures.
             if(procedures.size() == 0)
@@ -247,65 +255,42 @@ public class Recipe implements Serializable {
     public int compareTo(Recipe other, String searchText)
     {
         // Recipes without a name are put at the bottom of the sort since List is reversed later.
-        if(this.getName() == null || this.getName().equals(""))
+        if(this.getName() == null || this.getName().equals("") )
         {
             return 100000;
         }
-        else if(other.getName() == null || other.getName().equals(""))
-        {
-            return -100000;
-        }
         FuzzyScore fuzzySearch = new FuzzyScore(Locale.US);
+        int ingredientsCloseness1 = calculateIngredientCloseness(this, searchText);
+        int ingredientsCloseness2 = calculateIngredientCloseness(other, searchText);
+            return (int)(fuzzySearch.fuzzyScore(other.getName(), searchText) * 2  + ingredientsCloseness2)
+                    - (int)(fuzzySearch.fuzzyScore(this.getName(), searchText) * 2 + ingredientsCloseness1);
+    }
+
+    private int calculateIngredientCloseness(Recipe recipe, String searchText)
+    {
         // Search terms checked against each ingredient, and overall closeness divided by total number
         // of ingredients to get average closeness. Very close matches are given particular weight.
+        // Will return 0 if there are no ingredients.
+        FuzzyScore fuzzySearch = new FuzzyScore(Locale.US);
         int closeness;
-        int ingredientsCloseness1 = 0;
-        if(this.getIngredients().size() == 0)
+        int ingredientsCloseness = 0;
+        if(recipe.getIngredients().size() > 0)
         {
-            // This ensures no division by 0.
-            ingredientsCloseness1 = 50;
-        }
-        else
-        {
-            for(Ingredient ingredient : this.getIngredients())
+            for(Ingredient ingredient : recipe.getIngredients())
             {
                 closeness = fuzzySearch.fuzzyScore(ingredient.getName(), searchText);
-                if(closeness > 8)
+                if(closeness < 10)
                 {
-                    ingredientsCloseness1 += closeness;
+                    ingredientsCloseness += closeness;
                 }
                 else
                 {
-                    ingredientsCloseness1 -= 10;
+                    ingredientsCloseness += closeness * 3;
                 }
             }
-            ingredientsCloseness1 /= this.getIngredients().size();
+            ingredientsCloseness /= recipe.getIngredients().size();
         }
-        int ingredientsCloseness2 = 0;
-        if(other.getIngredients().size() == 0)
-        {
-            // This ensures no division by 0.
-            ingredientsCloseness2 = 50;
-        }
-        else
-        {
-            for(Ingredient ingredient : other.getIngredients())
-            {
-                closeness = fuzzySearch.fuzzyScore(ingredient.getName(), searchText);
-                if(closeness > 8)
-                {
-                    ingredientsCloseness2 += closeness;
-                }
-                else
-                {
-                    ingredientsCloseness2 -= 10;
-                }
-            }
-            ingredientsCloseness2 /= other.getIngredients().size();
-        }
-
-        return (int)(fuzzySearch.fuzzyScore(other.getName(), searchText) * 2  + ingredientsCloseness2)
-                - (int)(fuzzySearch.fuzzyScore(this.getName(), searchText) * 2 + ingredientsCloseness1);
+        return ingredientsCloseness;
     }
 
     public void updateLastAccessToNow()
